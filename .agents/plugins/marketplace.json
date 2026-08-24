@@ -1,0 +1,20 @@
+{
+  "name": "point-cloud-reverse-engineering",
+  "interface": {
+    "displayName": "Point Cloud Reverse Engineering"
+  },
+  "plugins": [
+    {
+      "name": "point-cloud-reverse-engineering",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

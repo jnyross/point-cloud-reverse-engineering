@@ -1,0 +1,32 @@
+[
+  {
+    "id": "point-cloud-reverse-engineering-1",
+    "request": "Turn this fused CrealityScan point cloud into an aligned BricsCAD model and verify the exported STL.",
+    "route": "operate",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-2",
+    "request": "Align this ASC point cloud in CloudCompare with the sole down and export a BricsCAD-compatible LAS.",
+    "route": "operate",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-3",
+    "request": "Trace splines directly on this point cloud, loft the surface patches, stitch them, and thicken the result.",
+    "route": "operate",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-4",
+    "request": "Build a fitted holder with a recessed seat from this scanned object while preserving the source scan.",
+    "route": "operate",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-5",
+    "request": "Diagnose why this CloudCompare or BricsCAD point-cloud workflow failed, reverse ineffective changes, and recover the last verified state.",
+    "route": "diagnose-and-verify",
+    "mutation": "none"
+  }
+]

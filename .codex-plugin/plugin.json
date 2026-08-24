@@ -1,0 +1,26 @@
+{
+  "name": "point-cloud-reverse-engineering",
+  "version": "0.1.0",
+  "description": "Turn fused point clouds into verified design-intent CAD in CrealityScan, CloudCompare, and BricsCAD.",
+  "author": {
+    "name": "jnyross",
+    "url": "https://github.com/jnyross"
+  },
+  "repository": "https://github.com/jnyross/point-cloud-reverse-engineering",
+  "license": "MIT",
+  "keywords": [
+    "point-cloud",
+    "reverse-engineering",
+    "cloudcompare",
+    "bricscad",
+    "cad"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Point Cloud Reverse Engineering",
+    "defaultPrompt": [
+      "Turn this fused point cloud into verified CAD geometry",
+      "Diagnose this CloudCompare to BricsCAD workflow"
+    ]
+  }
+}
