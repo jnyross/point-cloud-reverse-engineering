@@ -34,6 +34,14 @@ Preserve the E57 archive and export LAS from the aligned cloud. Removing normals
 
 Check both thickness and view direction. Narrower is not always crisper: an undersampled crop can be unusable, while a wide crop mixes surfaces. Adjust thickness in small reversible steps and view normal to the cut.
 
+### A manufactured corner looks faceted or over-rounded
+
+Identify the affected feature before changing geometry: footprint corner, top/bottom perimeter transition, or shaded display. Inspect a wireframe or edge view and a section normal to the suspected edge, then query whether the boundary is an analytic arc or spline, a segmented polyline, or a filleted or chamfered solid edge. Fix the diagnosed layer: adjust display tessellation reversibly when the analytic geometry is sound, rebuild a segmented footprint with the simplest justified analytic primitive, or apply a measured edge treatment only when the feature-intent contract supports it. A 3D edge fillet is not a remedy for footprint-corner faceting.
+
+### The entity count is correct but the feature topology is wrong
+
+Return to the feature-intent contract and inspect every transition in its defining orthographic or section view. Reject unintended fillet or chamfer faces even when the drawing contains the expected number of solids. Restore the last accepted body or replace only the rejected feature, repeat the overlay and topology checks, then save and reopen the corrected DWG.
+
 ### A loft is degenerate or distorted
 
 Check that profiles are nondegenerate, meaningfully separated, similarly ordered, and placed on intended planes. Start with three corresponding profiles and no rails. Add an intermediate profile or minimum guide rails only where the overlay proves a need. Use direct solids for planar regions.
@@ -56,7 +64,7 @@ Call the workflow complete only when:
 
 1. the original source still exists unchanged;
 2. every application handoff has recorded units, point count, and bounds;
-3. the intended CAD entity chain is confirmed from live state;
+3. the intended CAD entity chain and every feature-intent transition are confirmed from live state;
 4. the separately named DWG exists and reopens cleanly;
 5. any requested STL passes structural and dimensional checks;
 6. any untested clearance, printability, or physical fit is labelled unverified.

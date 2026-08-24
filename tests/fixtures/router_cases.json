@@ -28,5 +28,17 @@
     "request": "Diagnose why this CloudCompare or BricsCAD point-cloud workflow failed, reverse ineffective changes, and recover the last verified state.",
     "route": "diagnose-and-verify",
     "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-6",
+    "request": "Reconstruct this manufactured enclosure from its point cloud with tangent rounded plan corners, crisp top and bottom perimeter edges, and no unsupported fillets.",
+    "route": "operate",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-7",
+    "request": "These BricsCAD corners look faceted. Diagnose whether the point-cloud fit, CAD outline, edge fillets, or display tessellation is responsible before changing the geometry.",
+    "route": "diagnose-and-verify",
+    "mutation": "none"
   }
 ]

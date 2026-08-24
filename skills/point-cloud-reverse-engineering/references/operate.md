@@ -10,7 +10,9 @@
    - **design-intent geometry** for straight, symmetric, tangent, cylindrical, planar, or otherwise manufactured features;
    - **freeform skin** for a curved surface governed by splines in two directions;
    - **section-controlled solid** for a long form whose cross-section changes along an axis.
-5. Record clearances and thicknesses as tunable design values. Do not derive them silently from tutorial examples.
+5. Record a compact feature-intent contract for each manufactured transition: component, defining view or axis, target primitive or continuity, edge treatment, supporting scan or user evidence, and confidence. Treat footprint corner radii and top/bottom perimeter transitions as independent features. Use a sharp transition when no evidence supports a fillet or chamfer.
+6. Keep distinct components such as enclosures, cables, fasteners, and holders as separate solids and layers through overlay acceptance. Union them only when the requested final output requires one body.
+7. Record clearances and thicknesses as tunable design values. Do not derive them silently from tutorial examples.
 
 ## CrealityScan to CloudCompare
 
@@ -95,8 +97,9 @@ Use when symmetry, tangency, uniformity, or manufacturability matters more than 
 
 1. Toggle the full point cloud on after every major body and inspect orthographic plus isometric views.
 2. Query the live drawing after each material operation. Confirm expected `SPLINE`, `LOFTEDSURFACE`, `SURFACE`, `REGION`, and `3DSOLID` counts rather than trusting appearance alone.
-3. Keep sketches and construction bodies until comparison passes.
-4. Save to a new DWG path, reopen it, and ensure no unsaved drawing changes remain.
-5. Export the selected final body as a high-quality binary STL when a printable mesh is requested.
-6. Independently verify dimensions, plausible volume, nonzero triangles, zero degenerate triangles, zero boundary and non-manifold edges, and consistent winding.
-7. State what remains unproved. CAD and STL checks do not prove printer-bed suitability, printed accuracy, physical fit, or service performance.
+3. Walk the feature-intent contract. View each transition normal to its defining plane or in section, confirm the intended sharp, rounded, tangent, or chamfered form, and reject unintended edge faces. A correct entity count does not satisfy this check.
+4. Keep sketches, separate component solids, and construction bodies until comparison passes.
+5. Save to a new DWG path, reopen it, and ensure no unsaved drawing changes remain.
+6. Export the selected final body as a high-quality binary STL when a printable mesh is requested.
+7. Independently verify dimensions, plausible volume, nonzero triangles, zero degenerate triangles, zero boundary and non-manifold edges, and consistent winding.
+8. State what remains unproved. CAD and STL checks do not prove printer-bed suitability, printed accuracy, physical fit, or service performance.
