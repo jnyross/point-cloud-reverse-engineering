@@ -1,0 +1,48 @@
+name: release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: validate release logic and manifests
+        run: |
+          python3 scripts/release.py --self-test
+          python3 -m json.tool plugin.json >/dev/null
+          python3 -m json.tool .codex-plugin/plugin.json >/dev/null
+          python3 -c "import json; assert json.load(open('plugin.json'))['version'] == json.load(open('.codex-plugin/plugin.json'))['version']"
+      - id: bump
+        run: |
+          CURRENT=$(python3 -c "import json; print(json.load(open('plugin.json'))['version'])")
+          VERSION=$(python3 scripts/release.py)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
+      - name: cut release
+        if: steps.bump.outputs.version != steps.bump.outputs.current
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "release-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add plugin.json .codex-plugin/plugin.json
+          git commit -m "chore(release): v${{ steps.bump.outputs.version }}"
+          git tag "v${{ steps.bump.outputs.version }}"
+          git push origin HEAD:main
+          git push origin "v${{ steps.bump.outputs.version }}"
+          gh release create "v${{ steps.bump.outputs.version }}" --generate-notes --title "v${{ steps.bump.outputs.version }}"

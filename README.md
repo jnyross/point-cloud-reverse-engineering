@@ -18,6 +18,19 @@ Start a new Codex session after installation. Example requests:
 - `Build a regularised holder recess from this scan and keep clearance as a calibration value.`
 - `Diagnose this failed point-cloud handoff and recover the last verified state.`
 
+## Releases and updates
+
+Every push to `main` cuts a semantic release. Commit subjects beginning with `feat` or containing `[minor]` produce a minor bump; `feat!`, `fix!`, or `BREAKING CHANGE` produce a major bump; everything else produces a patch. The release workflow updates both plugin manifests, creates a matching `vX.Y.Z` tag, and publishes a GitHub Release.
+
+Refresh and reinstall the latest release with:
+
+```bash
+codex plugin marketplace upgrade point-cloud-reverse-engineering
+codex plugin add point-cloud-reverse-engineering@point-cloud-reverse-engineering
+```
+
+Start a new Codex session after updating.
+
 ## Requirements and limits
 
 - The relevant desktop applications must already be installed and licensed.
