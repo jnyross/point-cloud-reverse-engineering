@@ -28,7 +28,7 @@ scoped: only requested surface.
 ## Verification
 - Identify whether every source is a point cloud or mesh and preserve the original source unchanged.
 - Verify units, scale, orientation, point count, and bounding dimensions after each application handoff.
-- Inspect the live CAD database after material operations and confirm the intended entity types and counts exist.
+- Verify both feature topology and database state: confirm each intended sharp, rounded, tangent, or chamfered transition in orthographic or section views, then confirm the intended entity types and counts.
 - Save the DWG to the stated path, confirm it reopens, and confirm no uncommitted drawing changes remain before completion.
 - For STL output, verify plausible dimensions and volume, nonzero triangle count, zero degenerate triangles, zero boundary and non-manifold edges, and consistent winding.
 - Treat visual fit, physical fit, and print success as unverified until directly observed.
@@ -43,7 +43,7 @@ scoped: only requested surface.
 
 ## Routes
 - Select **Investigate** for analyze, assess, audit, diagnose, explain, inspect, investigate, review, or understand. Read [diagnose-and-verify.md](references/diagnose-and-verify.md).
-- Select **Change** for add, align, build, change, create, delete, edit, export, fix, implement, loft, refactor, remove, repair, stitch, thicken, trace, turn, update, or write. Read [operate.md](references/operate.md).
+- Select **Change** for add, align, build, change, create, delete, edit, export, fix, implement, loft, reconstruct, refactor, remove, repair, stitch, thicken, trace, turn, update, or write. Read [operate.md](references/operate.md).
 
 ## Operating rule
 
