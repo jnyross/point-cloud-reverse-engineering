@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "point-cloud-reverse-engineering",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Turns fused 3D-scan point clouds into verified, design-intent CAD geometry for people doing practical reverse engineering in CrealityScan, CloudCompare, and BricsCAD, with reversible recovery and evidence-gated exports.",
   "license": "MIT"
 }
