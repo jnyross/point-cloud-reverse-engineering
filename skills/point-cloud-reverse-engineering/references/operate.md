@@ -17,6 +17,14 @@
 9. Define acceptance before construction: global and critical-feature tolerances, permitted exclusions, cloud-to-CAD versus CAD-to-cloud direction, required percentiles and maximums, and a safe memory/thread budget.
 10. For repeated manufactured features, use one shared parametric definition and instance it unless the evidence supports real variation.
 
+## Choose the host route
+
+The CrealityScan/CloudCompare/BricsCAD sections below remain available when
+those applications are the user's chosen workflow. On Linux, for an
+open-source-only request, or when the proprietary applications are
+unavailable, read and follow [linux-open-source.md](linux-open-source.md)
+instead. Both routes use the same feature-intent and verification gates.
+
 ## CrealityScan to CloudCompare
 
 1. Complete point-cloud processing, fusion, and restrained cleanup in CrealityScan. Preserve edges and mating surfaces.

@@ -58,5 +58,23 @@
     "request": "Compress this accepted analytic point-cloud reconstruction into the shortest editable CAD feature program while preserving B-rep geometry, surface types, repeated-feature orientation, rendered sections, and fixed point-cloud tolerances.",
     "route": "operate",
     "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-11",
+    "request": "Containerize the open-source Linux runtime for this point-cloud workflow and verify a bounded STEP and STL canary.",
+    "route": "linux-open-source",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-12",
+    "request": "Reconstruct this fused point cloud as editable analytic STEP and validated STL on my Linux agent using only open-source geometry tools.",
+    "route": "operate",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-13",
+    "request": "BricsCAD is unavailable on this Linux box. Diagnose the smallest open-source route that preserves the scan alignment and CAD verification gates.",
+    "route": "diagnose-and-verify",
+    "mutation": "none"
   }
 ]

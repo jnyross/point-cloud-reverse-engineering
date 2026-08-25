@@ -1,6 +1,6 @@
 ---
 name: point-cloud-reverse-engineering
-description: Turns fused 3D-scan point clouds and supporting photographs into verified scan-following or analytic design-intent CAD, with reversible recovery, feature-local fit checks, and evidence-gated STEP, DWG, or STL exports.
+description: Turns fused 3D-scan point clouds and supporting photographs into verified scan-following or analytic design-intent CAD on desktop or open-source Linux toolchains, with reversible recovery, feature-local fit checks, and evidence-gated STEP, DWG, or STL exports.
 ---
 
 # Point Cloud Reverse Engineering
@@ -11,6 +11,8 @@ description: Turns fused 3D-scan point clouds and supporting photographs into ve
 - Trace splines directly on this point cloud, loft the surface patches, stitch them, and thicken the result.
 - Build a fitted holder with a recessed seat from this scanned object while preserving the source scan.
 - Reconstruct this manufactured enclosure as editable analytic STEP geometry, using close-up photographs to resolve feature topology and the point cloud for dimensions.
+- Reconstruct this scan as editable analytic STEP and STL on a Linux agent using only open-source geometry tools.
+- Containerize the open-source Linux runtime for this point-cloud workflow and verify a bounded STEP/STL canary.
 - Compress this accepted analytic reconstruction into the smallest editable feature program without changing its geometry, feature intent, or scan-validation result.
 - Diagnose why this CloudCompare or BricsCAD point-cloud workflow failed, reverse ineffective changes, and recover the last verified state.
 
@@ -25,7 +27,7 @@ description: Turns fused 3D-scan point clouds and supporting photographs into ve
 A fused point cloud in ASC, E57, or LAS form, raw or already aligned; the user must also state the object or design intent and any fit, clearance, symmetry, or regularity requirements. Close-up photographs or product references may resolve feature identity, topology, and continuity, but are not dimensional evidence unless independently calibrated. A mesh may be secondary evidence but is not the primary source when a point cloud is available.
 
 ## Mutation policy
-scoped: only the requested model or rejected feature.
+scoped: only the requested model, rejected feature, or explicitly requested local runtime setup.
 
 ## Verification
 - Identify whether every source is a point cloud or mesh and preserve the original source unchanged.
@@ -41,7 +43,7 @@ scoped: only the requested model or rejected feature.
 
 ## Boundaries
 - Never overwrite or delete source scans or previously approved artifacts; work from copies and keep reversible checkpoints.
-- Never bypass macOS security controls or install, uninstall, reset, or broadly reconfigure applications without explicit approval.
+- Never bypass host security controls or install, uninstall, reset, or broadly reconfigure applications without explicit approval.
 - Never substitute a mesh as the primary geometric source when the corresponding point cloud is available.
 - Never reproduce scan noise when the requested result calls for symmetric, tangent, or otherwise regular design intent.
 - Never use a global pass percentage as proof that each critical feature has the correct manufactured topology.
@@ -50,8 +52,9 @@ scoped: only the requested model or rejected feature.
 
 ## Routes
 - Select **Investigate** for analyze, assess, audit, diagnose, explain, inspect, investigate, review, or understand. Read [diagnose-and-verify.md](references/diagnose-and-verify.md).
+- Select **Linux open source runtime** for containerize, or provision. Read [linux-open-source.md](references/linux-open-source.md).
 - Select **Change** for add, align, build, change, compress, create, delete, edit, export, fix, implement, loft, optimise, optimize, rebuild, reconstruct, refactor, remove, repair, simplify, stitch, thicken, trace, turn, update, or write. Read [operate.md](references/operate.md).
 
 ## Operating rule
 
-Read the selected route completely before acting. For live GUI work, use the host's computer-control capability when available and verify each material command from the application state. Prefer an equivalent bounded numerical or CAD-kernel route when it proves the required geometry without the GUI; if neither route is available, stop at a precise manual handoff rather than claiming completion.
+Read the selected route completely before acting, including its platform-specific route when applicable. For live GUI work, use the host's computer-control capability when available and verify each material command from the application state. Prefer an equivalent bounded numerical or CAD-kernel route when it proves the required geometry without the GUI; if neither route is available, stop at a precise manual handoff rather than claiming completion.

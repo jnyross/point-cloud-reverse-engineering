@@ -16,7 +16,11 @@ Run one small canary at a time. Reverse an ineffective change before trying the 
 
 ### The source is a mesh
 
-Stop. Return to CrealityScan and export the fused point cloud. A mesh can remain secondary visual evidence but must not silently replace the cloud.
+Stop. Return to the original scan project or scanner export and obtain the fused point cloud. A mesh can remain secondary visual evidence but must not silently replace the cloud.
+
+### A proprietary desktop application is unavailable
+
+Do not treat that as a geometry failure or silently substitute a scan-following mesh. If Linux or open-source tools are acceptable, switch to the [Linux open-source route](linux-open-source.md): CloudCompare for the cloud and the bundled analytic `$cad` stack for STEP and derived STL. Preserve the same alignment, local-feature, topology, tolerance, and resource gates. Otherwise give the smallest precise manual handoff for the user's chosen application.
 
 ### ASC imports incorrectly
 
