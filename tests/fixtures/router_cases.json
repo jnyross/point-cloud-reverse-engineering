@@ -40,5 +40,23 @@
     "request": "These BricsCAD corners look faceted. Diagnose whether the point-cloud fit, CAD outline, edge fillets, or display tessellation is responsible before changing the geometry.",
     "route": "diagnose-and-verify",
     "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-8",
+    "request": "Use this point cloud and the close-up photographs to rebuild the enclosure as editable analytic STEP geometry, keeping flat surfaces planar, circular openings cylindrical, and transitions tangent.",
+    "route": "operate",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-9",
+    "request": "The CAD is globally 99 percent within one millimetre, but its USB ports and one corner still look deformed. Diagnose whether the feature topology is wrong before changing the model.",
+    "route": "diagnose-and-verify",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-10",
+    "request": "Compress this accepted analytic point-cloud reconstruction into the shortest editable CAD feature program while preserving B-rep geometry, surface types, repeated-feature orientation, rendered sections, and fixed point-cloud tolerances.",
+    "route": "operate",
+    "mutation": "scoped"
   }
 ]
