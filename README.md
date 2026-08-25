@@ -1,6 +1,6 @@
 # Point Cloud Reverse Engineering
 
-A Codex plugin for turning fused 3D-scan point clouds into verified CAD geometry with CrealityScan, CloudCompare, and BricsCAD. It covers physical-datum alignment, thin-crop section lofting, direct spline surface construction, fitted recesses, regularised design-intent geometry, reversible diagnosis, and evidence-gated STEP/DWG/STL exports.
+A Codex plugin for turning fused 3D-scan point clouds into verified CAD geometry. It supports the CrealityScan/CloudCompare/BricsCAD desktop workflow and an open-source Linux route using CloudCompare plus cadgen/build123d/OpenCascade. It covers physical-datum alignment, thin-crop section lofting, direct spline surface construction, fitted recesses, regularised design-intent geometry, reversible diagnosis, and evidence-gated STEP/DWG/STL exports.
 
 The plugin also bundles the complete `earthtojake/text-to-cad` skill suite and its runtime scripts. It does not install desktop applications, Python packages, printer software, scanner data, CAD drawings, or downloaded videos.
 
@@ -28,6 +28,7 @@ Start a new Codex session after installation. Example requests:
 - `Build a regularised holder recess from this scan and keep clearance as a calibration value.`
 - `Diagnose this failed point-cloud handoff and recover the last verified state.`
 - `Create an editable STEP model of this bracket and validate its exported STL.`
+- `Reconstruct this scan as editable analytic STEP and STL on Linux using only open-source geometry tools.`
 - `Check this mesh for additive-manufacturing problems and prepare a dry-run Bambu handoff.`
 
 ## Releases and updates
@@ -45,7 +46,7 @@ Start a new Codex session after updating.
 
 ## Requirements and limits
 
-- The relevant desktop applications must already be installed and licensed.
+- The selected route's tools must already be installed. The Linux route uses open-source CloudCompare and an isolated Python 3.11/3.12 cadgen/build123d/OpenCascade runtime; proprietary desktop applications are optional.
 - Individual companion skills may require the command-line tools or Python packages named in their own instructions.
 - Live application work requires a host with computer-control support; otherwise Codex gives a precise manual handoff.
 - Source scans are preserved. Installs, resets, security changes, publishing, purchasing, and physical printing remain outside the skill's autonomous scope.
