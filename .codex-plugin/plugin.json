@@ -1,6 +1,6 @@
 {
   "name": "point-cloud-reverse-engineering",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Turn fused point clouds into verified design-intent CAD, with companion CAD, robotics, fabrication, and validation skills.",
   "author": {
     "name": "jnyross",

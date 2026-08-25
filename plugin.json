@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "point-cloud-reverse-engineering",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Turns fused 3D scans into verified design-intent CAD and bundles companion skills for CAD creation, viewing, validation, robotics, fabrication, and standard-part workflows.",
   "license": "MIT"
 }
