@@ -25,8 +25,8 @@ through that runner, for example:
 ```bash
 cad-oss /plugin/skills/cad/scripts/gen part.step.py --write
 cad-oss /plugin/skills/cad/scripts/inspect validate part.step
-cad-oss /plugin/skills/cad/scripts/export part.step --format stl
-cad-oss /plugin/skills/cad/scripts/snapshot part.step --output snapshots
+cad-oss /plugin/skills/cad/scripts/export part.step --stl
+cad-oss /plugin/skills/cad/scripts/snapshot --input part.step --output snapshots/part.png
 ```
 
 Use the runner's mounted working directory for inputs and outputs. Do not copy
