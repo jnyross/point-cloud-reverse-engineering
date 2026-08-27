@@ -1,0 +1,41 @@
+name: quality
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: install pinned formal schema validator
+        run: "python3 -m pip install --disable-pip-version-check --only-binary=:all: jsonschema==4.26.0"
+      - name: validate repository contracts
+        run: python3 scripts/validate_repo.py
+      - name: run unit tests
+        run: python3 -m unittest discover -s tests -p "test_*.py" -v
+      - name: verify release and preflight CLIs
+        run: |
+          python3 scripts/release.py --self-test
+          python3 scripts/compatibility_preflight.py --self-test
+      - name: verify deterministic distributions
+        if: matrix.python-version == '3.13'
+        run: python3 scripts/build_distributions.py --check

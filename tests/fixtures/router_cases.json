@@ -26,7 +26,7 @@
   {
     "id": "point-cloud-reverse-engineering-5",
     "request": "Diagnose why this CloudCompare or BricsCAD point-cloud workflow failed, reverse ineffective changes, and recover the last verified state.",
-    "route": "diagnose-and-verify",
+    "route": "read-only",
     "mutation": "none"
   },
   {
@@ -38,7 +38,7 @@
   {
     "id": "point-cloud-reverse-engineering-7",
     "request": "These BricsCAD corners look faceted. Diagnose whether the point-cloud fit, CAD outline, edge fillets, or display tessellation is responsible before changing the geometry.",
-    "route": "diagnose-and-verify",
+    "route": "read-only",
     "mutation": "none"
   },
   {
@@ -50,7 +50,7 @@
   {
     "id": "point-cloud-reverse-engineering-9",
     "request": "The CAD is globally 99 percent within one millimetre, but its USB ports and one corner still look deformed. Diagnose whether the feature topology is wrong before changing the model.",
-    "route": "diagnose-and-verify",
+    "route": "read-only",
     "mutation": "none"
   },
   {
@@ -74,20 +74,20 @@
   {
     "id": "point-cloud-reverse-engineering-13",
     "request": "BricsCAD is unavailable on this Linux box. Diagnose the smallest open-source route that preserves the scan alignment and CAD verification gates.",
-    "route": "diagnose-and-verify",
+    "route": "read-only",
     "mutation": "none"
   },
   {
     "id": "point-cloud-reverse-engineering-14",
     "request": "Use Blender, CAD Sketcher, Open3D, and a localhost agent bridge to reconstruct this rigid enclosure, keeping a smaller display cloud separate from the measurement evidence.",
-    "route": "blender-ai-workbench",
+    "route": "operate",
     "mutation": "scoped"
   },
   {
     "id": "point-cloud-reverse-engineering-15",
     "request": "Compare Blender, a tiled browser plus OCCT, CloudCompare plus BricsCAD, and an organic mesh-first workflow for this scan before choosing the modelling authority.",
-    "route": "stack-selection",
-    "mutation": "scoped"
+    "route": "read-only",
+    "mutation": "none"
   },
   {
     "id": "point-cloud-reverse-engineering-16",
@@ -98,19 +98,139 @@
   {
     "id": "point-cloud-reverse-engineering-17",
     "request": "Blender becomes unusable when I instance the full point cloud, and the CAD Sketcher body renders but direct mesh conversion fails. Diagnose this without editing.",
-    "route": "diagnose-and-verify",
+    "route": "read-only",
     "mutation": "none"
   },
   {
     "id": "point-cloud-reverse-engineering-18",
     "request": "This is an organic forearm scan for a print-fit shell rather than a manufactured part. Decide whether a validated mesh-first STL route is more honest than analytic STEP.",
-    "route": "stack-selection",
-    "mutation": "scoped"
+    "route": "read-only",
+    "mutation": "none"
   },
   {
     "id": "point-cloud-reverse-engineering-19",
     "request": "Combine the accepted alignment and regularised parameters from the Blender workbench with an analytic OpenCascade STEP, then compare it against the same fixed cloud masks.",
     "route": "stack-selection",
     "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-20-question-compare",
+    "request": "How does the Blender stack compare with the browser and OCCT route for this point cloud?",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-21-question-choose",
+    "request": "Which modelling authority should we choose for editable STEP and an organic fit shell?",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-22-advisory-select",
+    "request": "Should we select Blender, browser OCCT, desktop CAD, or mesh-first for this scan?",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-23-imperative-compare",
+    "request": "Compare Blender, CAD Sketcher, a tiled browser with OCCT, and mesh-first for this scan before choosing an authority.",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-24-imperative-decide",
+    "request": "Decide whether Blender or a replayable browser OCCT chain is the better authority for this point cloud.",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-25-explicit-read-only",
+    "request": "Review the OCCT feature chain and Blender scene without editing either artifact.",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-26-direct-browser",
+    "request": "Reconstruct this calibrated point cloud in the browser as a replayable OCCT operation chain and export STEP after clean replay.",
+    "route": "operate",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-27-direct-organic",
+    "request": "Build an organic mesh-first clearance shell from this forearm point cloud and export a validated STL-only artifact.",
+    "route": "operate",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-28-direct-blender",
+    "request": "Reconstruct this enclosure in Blender with CAD Sketcher, preserve the native scene, and verify it after reopening.",
+    "route": "operate",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-29-negative-blend-step",
+    "request": "Why does an evaluated Blender mesh not satisfy an editable analytic STEP deliverable?",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-30-negative-stl-step",
+    "request": "Review whether this mesh-first STL can honestly be called editable STEP without changing it.",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-31-ambiguous",
+    "request": "The scan and the model do not seem quite right.",
+    "route": "fallback",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-32-authority-ambiguous",
+    "request": "A Blender or browser OCCT workbench for the point cloud.",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-33-dual-diagnose-change",
+    "request": "Inspect the fixed cloud registration and rebuild only the rejected USB port.",
+    "route": "operate",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-34-dual-compare-combine",
+    "request": "Compare the viable authorities and then combine Open3D evidence, Blender review, and an OCCT STEP generator.",
+    "route": "stack-selection",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-35-dual-diagnose-provision",
+    "request": "Diagnose the unavailable desktop route and provision the bounded Linux open-source runtime.",
+    "route": "linux-open-source",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-36-architect-read-only",
+    "request": "Architect the safest hybrid stack for this point cloud and explain the proposed authority handoffs.",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-37-hybrid-ambiguous",
+    "request": "A hybrid Blender and OpenCascade workflow for this point cloud.",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-38-bare-linux",
+    "request": "A Linux point-cloud workflow.",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-39-bare-hybrid",
+    "request": "A hybrid point-cloud workflow.",
+    "route": "read-only",
+    "mutation": "none"
   }
 ]

@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "tested": "The exact component tuple completed a bounded local benchmark.",
+    "probe_only": "Presence or import was observed, but the complete modelling route was not exercised.",
+    "unknown": "No compatibility claim; unknown never means unsupported.",
+    "incompatible": "A concrete incompatibility was reproduced for the exact tuple only."
+  },
+  "components": {
+    "blender": {
+      "tested": [
+        {
+          "version": "5.2.0 LTS",
+          "embedded_python": "3.13.13",
+          "scope": "Blender AI-workbench benchmark with the component tuple below"
+        }
+      ],
+      "known_incompatible": [
+        {
+          "version": "5.0.1",
+          "embedded_python_abi": "cpython-314",
+          "cad_sketcher": "0.30.0",
+          "with": "CAD Sketcher 0.30.0 bundled cp311-cp313 solver wheels",
+          "scope": "Extension compatibility check; not a universal Blender 5.0 claim"
+        }
+      ],
+      "unknown": [
+        "Other Blender releases and distributor-specific embedded Python builds",
+        "Interactive GUI behavior outside the tested component tuple"
+      ]
+    },
+    "blender_python_abi": {
+      "tested": [
+        {
+          "version": "3.13.13",
+          "abi": "cp313",
+          "blender": "5.2.0 LTS",
+          "scope": "Integrated Blender benchmark"
+        }
+      ],
+      "unknown": [
+        "Binary-wheel interoperability across system Python and Blender embedded Python",
+        "Any ABI not explicitly named by an installed extension wheel"
+      ]
+    },
+    "host_python": {
+      "probe_only": [
+        {
+          "version": "3.14.4",
+          "abi": "cpython-314",
+          "scope": "Package-presence and import probes only; not an integrated CAD runtime claim"
+        }
+      ],
+      "unknown": [
+        "Other host Python versions and ABIs",
+        "Availability of CAD-kernel binary dependencies"
+      ]
+    },
+    "cad_sketcher": {
+      "tested": [
+        {
+          "version": "0.30.0",
+          "blender": "5.2.0 LTS",
+          "blender_python_abi": "cp313",
+          "scope": "Sketch creation and saved native scene in the local benchmark"
+        }
+      ],
+      "unknown": [
+        "Unlisted Blender and Python ABI combinations",
+        "Exact STEP semantics from evaluated display meshes"
+      ]
+    },
+    "agent_bridge": {
+      "tested": [
+        {
+          "version": "0.5.6",
+          "blender": "5.2.0 LTS",
+          "scope": "Local bridge inspection and agent-operated Blender benchmark"
+        }
+      ],
+      "unknown": [
+        "Remote bridges",
+        "Unlisted bridge or Blender versions",
+        "Host authentication and transport configuration"
+      ]
+    },
+    "agent_bridge_command": {
+      "tested": [
+        {
+          "version": "0.5.6",
+          "scope": "Local agent bridge command from the integrated Blender benchmark"
+        }
+      ],
+      "unknown": [
+        "Commands that do not report an implementation version",
+        "Unlisted bridge command versions"
+      ]
+    },
+    "open3d": {
+      "tested": [
+        {
+          "version": "0.19.0",
+          "host_python": "3.14.4",
+          "host_python_abi": "cpython-314",
+          "scope": "Numerical point-cloud analysis in the local benchmark"
+        }
+      ],
+      "companion_versions": {
+        "numpy": "2.3.5",
+        "scipy": "1.16.3",
+        "trimesh": "4.5.1"
+      },
+      "unknown": [
+        "GPU acceleration",
+        "Other wheel and platform combinations"
+      ]
+    },
+    "numpy": {
+      "tested": [
+        {
+          "version": "2.3.5",
+          "host_python": "3.14.4",
+          "host_python_abi": "cpython-314",
+          "scope": "Numerical evidence benchmark"
+        }
+      ]
+    },
+    "scipy": {
+      "tested": [
+        {
+          "version": "1.16.3",
+          "host_python": "3.14.4",
+          "host_python_abi": "cpython-314",
+          "scope": "Numerical evidence benchmark"
+        }
+      ]
+    },
+    "trimesh": {
+      "tested": [
+        {
+          "version": "4.5.1",
+          "host_python": "3.14.4",
+          "host_python_abi": "cpython-314",
+          "scope": "Mesh validation benchmark"
+        }
+      ]
+    },
+    "cloudcompare": {
+      "tested": [
+        {
+          "version": "2.13.2",
+          "scope": "Desktop alignment and bounded evidence route"
+        }
+      ],
+      "unknown": [
+        "Plugin availability in distributor builds",
+        "Headless GUI support"
+      ]
+    },
+    "cadgen": {
+      "locked_version": "0.4.26",
+      "status": "vendored",
+      "unknown": [
+        "External CAD-kernel packages not supplied by the installed skill runtime"
+      ]
+    },
+    "browser_occt": {
+      "status": "unknown",
+      "unknown": [
+        "Browser engine, WebAssembly memory ceiling, and OCCT service versions"
+      ]
+    },
+    "bricscad": {
+      "status": "unknown",
+      "unknown": [
+        "BricsCAD edition, release, licence, and installed point-cloud modules"
+      ]
+    }
+  },
+  "tested_stack": {
+    "blender": "5.2.0 LTS",
+    "blender_python": "3.13.13",
+    "cad_sketcher": "0.30.0",
+    "agent_bridge": "0.5.6",
+    "agent_bridge_command": "0.5.6",
+    "open3d": "0.19.0",
+    "numpy": "2.3.5",
+    "scipy": "1.16.3",
+    "trimesh": "4.5.1",
+    "cloudcompare": "2.13.2"
+  },
+  "routes": {
+    "blender-ai-workbench": {
+      "required_components": [
+        "blender",
+        "blender_python_abi",
+        "cad_sketcher",
+        "agent_bridge",
+        "agent_bridge_command"
+      ],
+      "tested": true,
+      "unknowns": [
+        "Production STEP remains a separate authority unless independently regenerated and validated"
+      ]
+    },
+    "hybrid-blender-brep": {
+      "required_components": [
+        "blender",
+        "blender_python_abi",
+        "cad_sketcher",
+        "agent_bridge",
+        "agent_bridge_command",
+        "host_python",
+        "open3d",
+        "cadgen"
+      ],
+      "tested": false,
+      "unknowns": [
+        "Bridge-to-generator handoff outside the versioned feature contract was not benchmarked end to end"
+      ]
+    },
+    "cloudcompare-desktop": {
+      "required_components": [
+        "cloudcompare",
+        "bricscad"
+      ],
+      "tested": false,
+      "unknowns": [
+        "BricsCAD was not part of the recorded open-source benchmark tuple"
+      ]
+    },
+    "open-source-brep": {
+      "required_components": [
+        "host_python",
+        "open3d",
+        "cadgen"
+      ],
+      "tested": false,
+      "unknowns": [
+        "Host-specific OpenCascade shared-library compatibility"
+      ]
+    },
+    "browser-occt": {
+      "required_components": [
+        "browser_occt"
+      ],
+      "tested": false,
+      "unknowns": [
+        "Browser engine, memory budget, and OCCT service remain deployment-specific"
+      ]
+    },
+    "organic-mesh-first": {
+      "required_components": [
+        "host_python",
+        "open3d"
+      ],
+      "tested": false,
+      "unknowns": [
+        "Print-process and fit evidence are job-specific"
+      ]
+    }
+  },
+  "outside_scope": [
+    "Point-cloud units, scale, coordinate frames, density, noise, and coverage",
+    "Host GPU and RAM sufficiency for a particular scan",
+    "Physical fit, print success, and manufacturing certification",
+    "Licences, credentials, network access, and bridge security configuration"
+  ]
+}

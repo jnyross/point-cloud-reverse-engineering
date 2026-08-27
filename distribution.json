@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "archive_root": "point-cloud-reverse-engineering",
+  "reproducibility": {
+    "scope": "Byte-for-byte deterministic for identical inputs in the same Python 3.13 CI builder environment; DISTRIBUTION-MANIFEST.json provides cross-builder content identity.",
+    "compression": "deflate-9"
+  },
+  "common_files": [
+    "plugin.json",
+    ".codex-plugin/plugin.json",
+    ".agents/plugins/marketplace.json",
+    "LICENSE",
+    "compatibility.json",
+    "vendor-lock.json",
+    "distribution.json",
+    "scripts/compatibility_preflight.py"
+  ],
+  "exclude_globs": [
+    "**/*.map",
+    "**/__pycache__/**",
+    "**/*.pyc",
+    "**/*.pyo",
+    "**/.DS_Store"
+  ],
+  "profiles": {
+    "core": {
+      "description": "Reverse-engineering routes plus the STEP-first CAD and review skills; optional manufacturing and robotics companions are omitted.",
+      "skills": [
+        "point-cloud-reverse-engineering",
+        "cad",
+        "cad-viewer"
+      ]
+    },
+    "full": {
+      "description": "Every bundled skill and all legacy reverse-engineering, manufacturing, printing, and robotics methods.",
+      "skills": "*"
+    }
+  }
+}

@@ -1,130 +1,133 @@
 # Stack selection and hybrid handoff
 
-Choose the modelling authority before construction. The best point-cloud
-processor, agent interface, visual reviewer, and production CAD kernel need not
-be the same application.
+Choose the modelling authority before construction. The best evidence engine,
+agent interface, visual reviewer, modelling authority, and delivery validator
+need not be the same application.
 
-## Separate the four roles
+When this file is reached from the read-only dispatcher, compare and recommend
+only: do not create files, configure tools, or mutate geometry. When reached by
+an explicitly scoped combine/integrate/orchestrate request, freeze the decision
+and validated handoff contract first, then execute only through the selected
+authority playbooks.
 
-1. **Evidence engine** — preserves, aligns, segments, fits, and measures the
+## Separate the roles
+
+1. **Evidence engine** preserves, aligns, segments, fits, and measures the fixed
    point cloud. Prefer CloudCompare or Open3D for large numerical work.
-2. **Interactive workbench** — exposes crops, sections, sketches, overlays, and
-   local corrections to a human or agent. This can be Blender, a purpose-built
-   browser viewer, BricsCAD, FreeCAD, or another CAD host.
-3. **Modelling authority** — owns the editable design-intent feature graph.
-   Use a B-rep kernel when STEP/DWG, CNC, or analytic-surface audit is required.
-4. **Delivery validator** — independently reopens the declared output and
-   checks dimensions, topology, surfaces, and any derived mesh.
+2. **Interactive workbench** exposes crops, sections, sketches, overlays, and
+   local corrections to a human or agent.
+3. **Modelling authority** owns the editable/replayable feature graph or
+   procedural source. It determines what editability claims are valid.
+4. **Delivery validator** reopens the declared output through the strongest
+   available validation tier and checks evidence-local as well as global facts.
 
-Do not let a convenient display mesh silently become the modelling authority.
+Do not let a display tile, display sample, evaluated object, or convenient mesh
+silently become measurement evidence or modelling authority.
+
+## Decide from disqualifiers first
+
+1. Identify the required primary authority: editable STEP/DWG, native BLEND,
+   replayable OCCT chain, or procedural mesh/STL-only.
+2. Classify critical geometry as manufactured analytic, section-controlled,
+   freeform manufactured skin, organic scan-following, or mixed by component.
+3. Reject a route that cannot represent the required authority, topology,
+   component split, unit calibration, uncertainty, or independent validation.
+4. Among viable routes, compare evidence capacity, local edit/recovery loop,
+   deterministic replay, agent surface, runtime availability, memory risk, and
+   validation independence.
+5. Record the selected authority, reasons, rejected alternatives, required
+   deliverables, host/runtime versions, and unresolved canaries before acting.
+
+Consult the repository's [recorded compatibility evidence](../../../compatibility.json)
+and, before an execution route, run the read-only
+[compatibility preflight](../../../scripts/compatibility_preflight.py). A detected
+binary, extension manifest, or package is not proof that the integrated route
+works; `unknown`, probe-only, and concrete incompatibility remain distinct.
 
 ## Route matrix
 
-| Route | Best use | Authority | Strength | Limitation |
-| --- | --- | --- | --- | --- |
-| CloudCompare + BricsCAD | Existing Payo-style desktop workflow | DWG/3DSOLID or STEP | Native point-cloud sketching and broad surface commands | Proprietary, GUI-dependent automation |
-| Open3D + bundled `$cad` | Open-source analytic reconstruction and manufacturing output | OpenCascade STEP | Deterministic, scriptable B-rep and independent validation | Less interactive point-cloud authoring |
-| Blender + CAD Sketcher + local agent bridge | AI-operated visual exploration, simple analytic profiles, scene evidence, and exception handling | Native `.blend` during exploration; STEP must be regenerated elsewhere when required | Strong agent surface, rendering, overlays, Geometry Nodes, reversible review | Display-density pressure, extension-version coupling, no implied STEP authority |
-| Tiled browser viewer + replayable OCCT chain | Repeatable product workflow for large clouds | Serialized operation chain plus OCCT STEP | Purpose-built crop/fit UX, streaming, testable regeneration | Requires a maintained application; browser/WASM memory constraints |
-| Open3D/SciPy/Trimesh mesh-first | Organic anatomy, scan-following shells, fit coupons, and print-only prototypes | Procedural source plus validated STL | Excellent registration and watertight mesh generation | Not editable analytic CAD; unsuitable as a STEP claim |
+| Route | Best use | Authority | Main limitation |
+| --- | --- | --- | --- |
+| CrealityScan/CloudCompare + BricsCAD | Existing desktop workflow, local point-cloud sketching, guide-rail lofts and stitched surfaces | DWG/3DSOLID or exported STEP | Proprietary and GUI-dependent |
+| Open3D/CloudCompare + bundled `$cad` | Scripted manufactured reconstruction and manufacturing output | OpenCascade STEP | Less interactive point-cloud authoring |
+| Blender + CAD Sketcher + local bridge | AI-operated overlays, scene evidence, simple constrained profiles and exception handling | Native BLEND during exploration; regenerate STEP elsewhere if required | Display-density and extension-version pressure; no implied B-rep authority |
+| Tiled browser viewer + replayable OCCT | Purpose-built streaming crop/fit UX and deterministic product workflow | Serialized chain plus OCCT B-rep | Application maintenance and browser/WASM resource constraints |
+| Open3D/SciPy/Trimesh mesh-first | Organic anatomy, scan-following shells, fit coupons and print-only prototypes | Procedural source plus validated STL | Not editable analytic CAD and unsuitable as a STEP claim |
 
-For a rigid manufactured part, prefer an analytic B-rep authority. For an
-organic print-fit object, a mesh-first route can be honest and effective when
-the requested deliverable is STL and physical fit remains separately tested.
+For a rigid manufactured part, prefer analytic B-rep authority. For an organic
+print-fit object, mesh-first can be more honest when STL is the required output.
+For mixed parts, preserve separate components and assign authority per component;
+do not force a cable or organic contact shell into the enclosure's primitive
+chain.
 
-## Recommended hybrid architecture
+## Preferred hybrid loop
 
 ```text
 immutable scan
-  -> CloudCompare/Open3D alignment and feature-local fits
-  -> versioned feature contract
-  -> OpenCascade/BricsCAD production B-rep
-  -> Blender or browser overlay and agent review
-  -> fixed cloud-to-CAD and CAD-to-cloud validation
-  -> reopened STEP/DWG and structurally checked derived STL
+  -> calibrated CloudCompare/Open3D evidence and feature-local fits
+  -> schema-valid feature contract
+  -> selected authority builds/replays one bounded feature
+  -> Blender/browser/desktop defining-section review
+  -> same fixed local + global evidence and uncertainty gates
+  -> accept checkpoint or revert one feature
+  -> strongest available reopen/interchange validation
 ```
 
-Blender or a browser workbench may propose parameters and topology, but the
-production authority consumes an explicit contract and is validated against
-the original evidence. Never reverse the handoff by rebuilding production CAD
-from a tessellated preview when analytic parameters are available.
+A workbench may propose topology and parameters, but the authority consumes an
+explicit contract and is revalidated against the original fixed evidence. Never
+rebuild production analytic CAD from a tessellated preview when analytic
+parameters and sections are available.
 
-## Minimum feature-contract artifact
+## Machine-readable handoff
 
-Store a versioned JSON or equivalent machine-readable record beside derived
-artifacts. Keep private source paths out of publishable examples.
+Use [the feature-contract schema](../assets/feature-contract.schema.json), start
+from [the canonical valid example](../assets/contracts/feature-contract.valid.json),
+and run [the contract validator](../scripts/validate_feature_contract.py) before
+the first authority mutation and after each accepted parameter/topology change.
+Use [the evidence CLI](../scripts/point_cloud_evidence.py) for deterministic
+source fingerprint, unit/bounds preflight, and bounded evidence summaries when
+the source format is supported.
 
-```json
-{
-  "schema_version": "1.0",
-  "source": {
-    "sha256": "<digest>",
-    "format": "ASC XYZ Nx Ny Nz",
-    "point_count": 0,
-    "units": "mm",
-    "units_status": "verified|provisional"
-  },
-  "alignment": {
-    "source_to_cad_4x4": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-    "datum_evidence": ["<datum and confidence>"]
-  },
-  "components": [
-    {
-      "id": "main-body",
-      "authority": "step",
-      "primitive_chain": ["profile", "extrude"],
-      "included_features": [],
-      "excluded_features": []
-    }
-  ],
-  "parameters": {
-    "raw_fit": {},
-    "regularized": {},
-    "units": "mm"
-  },
-  "validation": {
-    "masks": {},
-    "tolerances": {},
-    "directions": ["cloud_to_cad", "cad_to_cloud"],
-    "required_percentiles": [95, 98]
-  }
-}
-```
+Contract v1 carries one independently accepted component. Use separate
+contracts for separate bodies or assembly components, then aggregate their
+statuses without weakening any component gate. Each contract must retain at
+least:
 
-The actual contract may add profiles, constraints, component transforms,
-surface classes, clearances, and repeated-feature instances. It must retain
-raw fitted values alongside regularised design values.
+- source and derivative checksums/counts, verified or provisional units, and
+  independent calibration evidence;
+- explicit source-to-authority transform direction, matrix layout, frames,
+  handedness, determinant, and tested inverse;
+- component authority, primitive/mesh intent, dependencies, included and
+  excluded features, raw fits, regularised parameters, and repeated instances;
+- fixed masks, directions, semantic surface/normal/coverage/section metrics,
+  tolerance, uncertainty budget, exclusions, and resource limits;
+- required deliverables, authority-specific completion gates, validation tier,
+  tool/kernel versions, and unverified physical claims.
 
-## Browser/OCCT product route
+Keep private source paths and user data out of publishable examples. A valid
+schema proves contract shape, not correctness of its geometric evidence.
 
-When a purpose-built browser application exists, keep its tiled cloud viewer
-and CAD kernel behind explicit interfaces:
+## Execute the selected authority
 
-- Stream point-cloud tiles with level-of-detail and a fixed memory budget;
-  avoid keeping the full cloud and a complex WASM B-rep in one heap.
-- Make crop, alignment, section, fit, sketch, and solid operations a replayable
-  serialized chain. Editing an earlier parameter must deterministically rebuild
-  downstream state.
-- Expose domain operations and evidence queries to agents directly when adding
-  MCP automation. Page clicks are a fallback, not the durable API.
-- Keep fit-time residuals and persistent X-ray overlays available throughout
-  construction, then run fixed export-time checks separately.
-- Treat advanced guide-rail lofts, patch/stitch continuity, and repeated-feature
-  orientation as kernel canaries. A visually plausible browser preview is not
-  evidence that the emitted B-rep has the intended topology.
-- Round-trip STEP through an independent desktop or OpenCascade reader. A
-  same-kernel export/import test is useful but not sufficient as the only gate.
-- Preserve autosave and operation-chain recovery so a browser or kernel crash
-  does not erase the last accepted modelling state.
+- Desktop CloudCompare/BricsCAD: follow [operate.md](operate.md) after the shared
+  preconstruction gates.
+- Linux analytic B-rep: follow [linux-open-source.md](linux-open-source.md).
+- Blender/CAD Sketcher: follow
+  [blender-ai-workbench.md](authorities/blender-ai-workbench.md).
+- Browser/replayable OCCT: follow
+  [browser-occt-workbench.md](authorities/browser-occt-workbench.md).
+- Organic procedural mesh/STL: follow
+  [organic-mesh-first.md](authorities/organic-mesh-first.md).
 
-## Handoff gates
+All routes apply the
+[shared evidence and validation contract](shared/evidence-and-validation.md).
+Selecting or combining tools never relaxes unit calibration, topology, local
+fit, uncertainty, replay/reopen, or authority-specific completion gates.
 
-- Hash and count the immutable source once; carry the identity across tools.
-- Record the numerical measurement sample and visual display sample separately.
-- Verify units, transform determinant, handedness, and post-handoff bounds.
-- Keep cables, connectors, fixtures, anatomy, and other distinct components
-  separate until their topology and fit contracts pass.
-- Re-run the same masks and directions against the production B-rep, not only
-  the workbench preview.
-- Reopen the final STEP/DWG independently. A reopened `.blend` proves the
-  workbench artifact, not the production CAD handoff.
+## Read-only decision output
+
+Return the fixed requirements, disqualified routes and reasons, selected route
+or unresolved tie, role allocation, authority, deliverables, mandatory canaries,
+compatibility risks, evidence gates, and the smallest scoped next action. If two
+routes remain viable because a critical fact is unknown, ask for that fact rather
+than selecting from convenience.

@@ -5,6 +5,10 @@ Nodes, or a Blender MCP/agent bridge. It is an AI-operated evidence and
 modelling workbench; it becomes the production authority only when the declared
 deliverable is the native `.blend` rather than editable STEP/DWG.
 
+Read the [shared evidence and validation contract](../shared/evidence-and-validation.md)
+before construction. This file adds Blender-specific operating details; it does
+not require the desktop CloudCompare/BricsCAD playbook.
+
 ## Tool roles and compatibility
 
 - Use Open3D or CloudCompare outside Blender for full-density alignment,
@@ -20,6 +24,11 @@ deliverable is the native `.blend` rather than editable STEP/DWG.
 - Pin the exact Blender and extension releases. Verify their Blender/Python ABI
   compatibility before enabling them; do not assume an add-on archive that
   installs will also load.
+
+Check the repository's [recorded compatibility evidence](../../../../compatibility.json)
+and read-only [compatibility preflight](../../../../scripts/compatibility_preflight.py)
+before depending on the Blender route. Treat a matching installed manifest as a
+probe result until the native feature and read-only bridge canaries pass.
 
 Do not install or globally configure these tools without authorization. Do not
 expose a Blender bridge on a non-loopback interface.
@@ -84,12 +93,15 @@ separate numerical set.
 - Treat GPU-less EEVEE or Cycles stalls as renderer constraints, not geometry
   failures. A deterministic Workbench render is sufficient evidence when it
   exposes the required fit views.
+- Apply the shared native BLEND completion gate. Record whether validation used
+  the producer session or a fresh Blender process; neither is a cross-kernel
+  validation of a requested STEP handoff.
 
 ## Production handoff
 
 If STEP/DWG is required, stop treating Blender as the final authority after the
 workbench passes. Export the machine-readable alignment and feature contract
-defined in [stack-selection.md](stack-selection.md), regenerate the analytic
+defined in [stack-selection.md](../stack-selection.md), regenerate the analytic
 solid through OpenCascade/`$cad` or the chosen production CAD host, and run the
 same local and global distance checks on that output. A mesh conversion from
 the Blender preview is a derived visualization/print artifact, not a substitute

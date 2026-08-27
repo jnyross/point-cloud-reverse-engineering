@@ -1,0 +1,840 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "synthetic-enclosure-canary",
+  "units": {
+    "linear": "mm",
+    "angular": "deg"
+  },
+  "frames": [
+    {
+      "id": "source",
+      "handedness": "right",
+      "x_axis": "scanner x",
+      "y_axis": "scanner y",
+      "z_axis": "scanner z",
+      "origin": "scanner export origin"
+    },
+    {
+      "id": "cad",
+      "handedness": "right",
+      "x_axis": "enclosure length",
+      "y_axis": "enclosure width",
+      "z_axis": "enclosure height",
+      "origin": "lower datum corner"
+    }
+  ],
+  "transforms": [
+    {
+      "id": "source-to-cad",
+      "from_frame": "source",
+      "to_frame": "cad",
+      "layout": "row-major",
+      "vector_convention": "column-vector",
+      "translation_units": "contract-linear-units",
+      "transform_type": "rigid",
+      "matrix": [
+        1,
+        0,
+        0,
+        10,
+        0,
+        1,
+        0,
+        20,
+        0,
+        0,
+        1,
+        30,
+        0,
+        0,
+        0,
+        1
+      ],
+      "inverse_matrix": [
+        1,
+        0,
+        0,
+        -10,
+        0,
+        1,
+        0,
+        -20,
+        0,
+        0,
+        1,
+        -30,
+        0,
+        0,
+        0,
+        1
+      ],
+      "reflection_allowed": false,
+      "held_out_count": 8,
+      "round_trip_max": 0,
+      "round_trip_tolerance": 1E-9,
+      "conditioning": {
+        "norm": "infinity",
+        "condition_number": 1,
+        "reciprocal_condition": 1,
+        "evidence": "linear 3x3 infinity-norm condition estimate"
+      },
+      "evidence": [
+        "three non-collinear manufactured datums; residual 0.05 mm"
+      ]
+    }
+  ],
+  "source": {
+    "artifact": {
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "byte_count": 512,
+      "format": "xyz",
+      "media_type": "text/plain"
+    },
+    "canonical_points_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "point_count": 8,
+    "point_record": "xyz",
+    "frame": "source",
+    "bounds": {
+      "frame": "source",
+      "min": [
+        0,
+        0,
+        0
+      ],
+      "max": [
+        2,
+        2,
+        2
+      ]
+    },
+    "units_status": "verified",
+    "units_evidence": "calibrated gauge feature measured 2.00 mm"
+  },
+  "samples": {
+    "measurement": {
+      "role": "measurement",
+      "artifact": {
+        "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "byte_count": 192,
+        "format": "xyz",
+        "media_type": "text/plain"
+      },
+      "canonical_points_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "source_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "source_point_count": 8,
+      "point_count": 8,
+      "frame": "source",
+      "bounds": {
+        "frame": "source",
+        "min": [
+          0,
+          0,
+          0
+        ],
+        "max": [
+          2,
+          2,
+          2
+        ]
+      },
+      "method": "full",
+      "algorithm_version": "pcre-tools-1.0",
+      "seed": 0,
+      "parameters": {}
+    },
+    "display": {
+      "role": "display",
+      "artifact": {
+        "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+        "byte_count": 96,
+        "format": "xyz",
+        "media_type": "text/plain"
+      },
+      "canonical_points_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "source_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "source_point_count": 8,
+      "point_count": 4,
+      "frame": "source",
+      "bounds": {
+        "frame": "source",
+        "min": [
+          0,
+          0,
+          0
+        ],
+        "max": [
+          2,
+          2,
+          2
+        ]
+      },
+      "method": "hash-rank",
+      "algorithm_version": "pcre-tools-1.0",
+      "seed": 7,
+      "parameters": {
+        "target_count": 4
+      }
+    }
+  },
+  "authority": {
+    "kind": "step_brep",
+    "artifact": {
+      "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "byte_count": 4096,
+      "format": "step",
+      "media_type": "model/step"
+    },
+    "validation_sample": {
+      "artifact": {
+        "sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+        "byte_count": 256,
+        "format": "xyz",
+        "media_type": "text/plain"
+      },
+      "point_count": 8,
+      "frame": "cad",
+      "bounds": {
+        "frame": "cad",
+        "min": [
+          10,
+          20,
+          30
+        ],
+        "max": [
+          12,
+          22,
+          32
+        ]
+      },
+      "derivation": {
+        "method": "analytic-surface-sampling",
+        "source_authority_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+        "algorithm_version": "pcre-tools-1.0",
+        "parameters_sha256": "8888888888888888888888888888888888888888888888888888888888888888"
+      }
+    },
+    "producer": {
+      "tool": "build123d",
+      "tool_version": "0.10",
+      "kernel": "opencascade-7.x"
+    },
+    "replay_source_sha256": "6666666666666666666666666666666666666666666666666666666666666666",
+    "independent_reopen": {
+      "passed": true,
+      "tool": "FreeCAD",
+      "tool_version": "1.0",
+      "kernel": "opencascade-7.x",
+      "validation_tier": "alternate-importer",
+      "notes": "reopened in a fresh process"
+    },
+    "brep_validation": {
+      "valid_solid": true,
+      "solid_count": 1,
+      "volume": 7.8,
+      "unsupported_freeform_surface_count": 0,
+      "surface_classes": [
+        "plane"
+      ]
+    }
+  },
+  "components": [
+    {
+      "id": "main-body",
+      "frame": "cad",
+      "authority_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "primitive_chain": [
+        "rectangle-profile",
+        "extrude"
+      ],
+      "included_features": [
+        "body-envelope"
+      ],
+      "excluded_features": [
+        "fixture-tab"
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "id": "body-width",
+      "component_id": "main-body",
+      "unit": "mm",
+      "raw_fit": 2.01,
+      "regularized": 2,
+      "fit_uncertainty": 0.03,
+      "regularization_reason": "regularized to the supported manufactured dimension",
+      "evidence_mask_ids": [
+        "critical-body"
+      ]
+    },
+    {
+      "id": "body-height",
+      "component_id": "main-body",
+      "unit": "mm",
+      "raw_fit": 2,
+      "regularized": 2,
+      "fit_uncertainty": 0.02,
+      "evidence_mask_ids": [
+        "critical-body"
+      ]
+    }
+  ],
+  "masks": [
+    {
+      "id": "global-fit",
+      "role": "global",
+      "component_id": "main-body",
+      "frame": "cad",
+      "definition_sha256": "a979579279dc6a499200674f70bbc185d562d5077bafb788b591d46af89adae4",
+      "definition": {
+        "type": "aabb",
+        "min": [
+          10,
+          20,
+          30
+        ],
+        "max": [
+          12,
+          22,
+          32
+        ]
+      }
+    },
+    {
+      "id": "critical-body",
+      "role": "critical-feature",
+      "component_id": "main-body",
+      "frame": "cad",
+      "definition_sha256": "396953f58d23fb82f894fe8266bc181226468255804d4cf4a58648be5840576b",
+      "definition": {
+        "type": "aabb",
+        "min": [
+          10,
+          20,
+          30
+        ],
+        "max": [
+          11,
+          22,
+          32
+        ]
+      },
+      "feature_id": "body-envelope"
+    },
+    {
+      "id": "fixture-region",
+      "role": "observed-surface",
+      "component_id": "main-body",
+      "frame": "cad",
+      "definition_sha256": "3e31a4c1db4fe21a2d72c64fe34315dd4d4a56703d22189360063f075ef7dc0d",
+      "definition": {
+        "type": "sphere",
+        "center": [
+          12,
+          22,
+          32
+        ],
+        "radius": 0.1
+      }
+    }
+  ],
+  "exclusions": [
+    {
+      "id": "exclude-fixture",
+      "mask_id": "fixture-region",
+      "reason": "fixture",
+      "rationale": "synthetic fixture points are not part of the requested body",
+      "approved": true
+    }
+  ],
+  "uncertainty": {
+    "unit": "mm",
+    "model": "rss-independent",
+    "confidence_level": 0.95,
+    "components": [
+      {
+        "id": "scanner-noise",
+        "kind": "scanner",
+        "standard_uncertainty": 0.04,
+        "evidence": "synthetic scanner canary specification"
+      },
+      {
+        "id": "registration-fit",
+        "kind": "registration",
+        "standard_uncertainty": 0.03,
+        "evidence": "datum alignment residual"
+      },
+      {
+        "id": "scale-calibration",
+        "kind": "scale",
+        "standard_uncertainty": 0,
+        "evidence": "synthetic scale canary is exact at reported precision"
+      },
+      {
+        "id": "segmentation-selection",
+        "kind": "segmentation",
+        "standard_uncertainty": 0,
+        "evidence": "synthetic masks follow exact canary boundaries"
+      },
+      {
+        "id": "sampling-canary",
+        "kind": "sampling",
+        "standard_uncertainty": 0,
+        "evidence": "full synthetic measurement and exact analytic authority sample"
+      },
+      {
+        "id": "model-fit",
+        "kind": "model",
+        "standard_uncertainty": 0.02,
+        "evidence": "feature-local residual"
+      }
+    ],
+    "combined_standard_uncertainty": 0.0538516481,
+    "coverage_factor": 2,
+    "expanded_uncertainty": 0.1077032962
+  },
+  "validation": {
+    "requirements": {
+      "directions": [
+        "cloud-to-authority",
+        "authority-to-cloud"
+      ],
+      "required_percentiles": [
+        50,
+        95,
+        98,
+        99
+      ],
+      "max_peak_memory_mib": 256,
+      "critical_component_ids": [
+        "main-body"
+      ]
+    },
+    "results": [
+      {
+        "id": "cloud-to-step-global",
+        "direction": "cloud-to-authority",
+        "metric_kind": "point-to-surface",
+        "signedness": "unsigned",
+        "comparison_frame": "cad",
+        "transform_ids": [
+          "source-to-cad"
+        ],
+        "semantic_target": {
+          "component_id": "main-body",
+          "feature_id": "body-envelope",
+          "surface_role": "fit-surface",
+          "surface_class": "plane"
+        },
+        "query_artifact_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "target_artifact_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+        "mask_ids": [
+          "global-fit"
+        ],
+        "exclusion_ids": [],
+        "observed_coverage_percent": 100,
+        "coverage_basis": "query-points",
+        "completeness": "complete-observed",
+        "normal_agreement": {
+          "applicability": "not-applicable",
+          "source_normal_quality": "absent",
+          "quality_evidence": "source point record is XYZ without normal columns",
+          "evaluated_count": 0,
+          "reason": "synthetic XYZ source has no normals"
+        },
+        "section_trim_evidence": {
+          "defining_section_ids": [
+            "body-mid-section"
+          ],
+          "trim_boundary_ids": [
+            "body-plan-trim"
+          ],
+          "evidence_sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+          "passed": true
+        },
+        "unobserved_face_treatment": "none-unobserved",
+        "evaluated_count": 8,
+        "tolerance": 0.2,
+        "within_tolerance_percent": 100,
+        "mean": 0.035625,
+        "rms": 0.04640177798317646,
+        "percentiles": [
+          {
+            "percentile": 50,
+            "distance": 0.0275
+          },
+          {
+            "percentile": 95,
+            "distance": 0.086
+          },
+          {
+            "percentile": 98,
+            "distance": 0.0944
+          },
+          {
+            "percentile": 99,
+            "distance": 0.0972
+          }
+        ],
+        "maximum": 0.1,
+        "realizability_certificate": {
+          "version": "normalized-blocks-v1",
+          "scale": 0.1,
+          "blocks": [
+            {"start_index": 0, "end_index": 2, "first": 0, "last": 0.2, "sum": 0.3, "sum_squares": 0.05, "threshold_class": "within"},
+            {"start_index": 3, "end_index": 3, "first": 0.25, "last": 0.25, "sum": 0.25, "sum_squares": 0.0625, "threshold_class": "within"},
+            {"start_index": 4, "end_index": 4, "first": 0.3, "last": 0.3, "sum": 0.3, "sum_squares": 0.09, "threshold_class": "within"},
+            {"start_index": 5, "end_index": 5, "first": 0.4, "last": 0.4, "sum": 0.4, "sum_squares": 0.16, "threshold_class": "within"},
+            {"start_index": 6, "end_index": 6, "first": 0.6, "last": 0.6, "sum": 0.6, "sum_squares": 0.36, "threshold_class": "within"},
+            {"start_index": 7, "end_index": 7, "first": 1, "last": 1, "sum": 1, "sum_squares": 1, "threshold_class": "within"}
+          ]
+        },
+        "backend": "cad-kernel",
+        "batch_size": 8,
+        "peak_memory_mib": 1,
+        "acceptance_criteria": {
+          "minimum_within_tolerance_percent": 99,
+          "minimum_observed_coverage_percent": 95,
+          "maximum_distance": 0.15,
+          "percentile_gates": [
+            {
+              "percentile": 50,
+              "maximum_distance": 0.05
+            },
+            {
+              "percentile": 95,
+              "maximum_distance": 0.1
+            },
+            {
+              "percentile": 98,
+              "maximum_distance": 0.11
+            },
+            {
+              "percentile": 99,
+              "maximum_distance": 0.12
+            }
+          ]
+        },
+        "acceptance_status": "pass",
+        "eligible_count": 8
+      },
+      {
+        "id": "step-to-cloud-global",
+        "direction": "authority-to-cloud",
+        "metric_kind": "point-to-point",
+        "signedness": "unsigned",
+        "comparison_frame": "cad",
+        "transform_ids": [
+          "source-to-cad"
+        ],
+        "semantic_target": {
+          "component_id": "main-body",
+          "feature_id": "body-envelope",
+          "surface_role": "fit-surface",
+          "surface_class": "plane"
+        },
+        "query_artifact_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+        "target_artifact_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "mask_ids": [
+          "global-fit"
+        ],
+        "exclusion_ids": [],
+        "observed_coverage_percent": 100,
+        "coverage_basis": "query-points",
+        "completeness": "complete-observed",
+        "normal_agreement": {
+          "applicability": "not-applicable",
+          "source_normal_quality": "absent",
+          "quality_evidence": "source point record is XYZ without normal columns",
+          "evaluated_count": 0,
+          "reason": "synthetic XYZ source has no normals"
+        },
+        "section_trim_evidence": {
+          "defining_section_ids": [
+            "body-mid-section"
+          ],
+          "trim_boundary_ids": [
+            "body-plan-trim"
+          ],
+          "evidence_sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+          "passed": true
+        },
+        "unobserved_face_treatment": "none-unobserved",
+        "evaluated_count": 8,
+        "tolerance": 0.2,
+        "within_tolerance_percent": 100,
+        "mean": 0.04375,
+        "rms": 0.057336724705898574,
+        "percentiles": [
+          {
+            "percentile": 50,
+            "distance": 0.035
+          },
+          {
+            "percentile": 95,
+            "distance": 0.106
+          },
+          {
+            "percentile": 98,
+            "distance": 0.1144
+          },
+          {
+            "percentile": 99,
+            "distance": 0.1172
+          }
+        ],
+        "maximum": 0.12,
+        "realizability_certificate": {
+          "version": "normalized-blocks-v1",
+          "scale": 0.12,
+          "blocks": [
+            {"start_index": 0, "end_index": 2, "first": 0, "last": 0.16666666666666669, "sum": 0.25, "sum_squares": 0.03472222222222223, "threshold_class": "within"},
+            {"start_index": 3, "end_index": 3, "first": 0.25, "last": 0.25, "sum": 0.25, "sum_squares": 0.0625, "threshold_class": "within"},
+            {"start_index": 4, "end_index": 4, "first": 0.33333333333333337, "last": 0.33333333333333337, "sum": 0.33333333333333337, "sum_squares": 0.11111111111111113, "threshold_class": "within"},
+            {"start_index": 5, "end_index": 5, "first": 0.4166666666666667, "last": 0.4166666666666667, "sum": 0.4166666666666667, "sum_squares": 0.17361111111111113, "threshold_class": "within"},
+            {"start_index": 6, "end_index": 6, "first": 0.6666666666666667, "last": 0.6666666666666667, "sum": 0.6666666666666667, "sum_squares": 0.44444444444444453, "threshold_class": "within"},
+            {"start_index": 7, "end_index": 7, "first": 1, "last": 1, "sum": 1, "sum_squares": 1, "threshold_class": "within"}
+          ]
+        },
+        "backend": "stdlib-bounded",
+        "batch_size": 8,
+        "peak_memory_mib": 1,
+        "acceptance_criteria": {
+          "minimum_within_tolerance_percent": 99,
+          "minimum_observed_coverage_percent": 95,
+          "maximum_distance": 0.15,
+          "percentile_gates": [
+            {
+              "percentile": 50,
+              "maximum_distance": 0.06
+            },
+            {
+              "percentile": 95,
+              "maximum_distance": 0.11
+            },
+            {
+              "percentile": 98,
+              "maximum_distance": 0.12
+            },
+            {
+              "percentile": 99,
+              "maximum_distance": 0.13
+            }
+          ]
+        },
+        "acceptance_status": "pass",
+        "eligible_count": 8
+      },
+      {
+        "id": "cloud-to-step-critical",
+        "direction": "cloud-to-authority",
+        "metric_kind": "point-to-surface",
+        "signedness": "unsigned",
+        "comparison_frame": "cad",
+        "transform_ids": [
+          "source-to-cad"
+        ],
+        "semantic_target": {
+          "component_id": "main-body",
+          "feature_id": "body-envelope",
+          "surface_role": "fit-surface",
+          "surface_class": "plane"
+        },
+        "query_artifact_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "target_artifact_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+        "mask_ids": [
+          "critical-body"
+        ],
+        "exclusion_ids": [],
+        "observed_coverage_percent": 100,
+        "coverage_basis": "query-points",
+        "completeness": "complete-observed",
+        "normal_agreement": {
+          "applicability": "not-applicable",
+          "source_normal_quality": "absent",
+          "quality_evidence": "source point record is XYZ without normal columns",
+          "evaluated_count": 0,
+          "reason": "synthetic XYZ source has no normals"
+        },
+        "section_trim_evidence": {
+          "defining_section_ids": [
+            "body-mid-section"
+          ],
+          "trim_boundary_ids": [
+            "body-plan-trim"
+          ],
+          "evidence_sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+          "passed": true
+        },
+        "unobserved_face_treatment": "none-unobserved",
+        "evaluated_count": 4,
+        "tolerance": 0.2,
+        "within_tolerance_percent": 100,
+        "mean": 0.0425,
+        "rms": 0.055,
+        "percentiles": [
+          {
+            "percentile": 50,
+            "distance": 0.03
+          },
+          {
+            "percentile": 95,
+            "distance": 0.091
+          },
+          {
+            "percentile": 98,
+            "distance": 0.0964
+          },
+          {
+            "percentile": 99,
+            "distance": 0.0982
+          }
+        ],
+        "maximum": 0.1,
+        "realizability_certificate": {
+          "version": "normalized-blocks-v1",
+          "scale": 0.1,
+          "blocks": [
+            {"start_index": 0, "end_index": 0, "first": 0.1, "last": 0.1, "sum": 0.1, "sum_squares": 0.01, "threshold_class": "within"},
+            {"start_index": 1, "end_index": 1, "first": 0.2, "last": 0.2, "sum": 0.2, "sum_squares": 0.04, "threshold_class": "within"},
+            {"start_index": 2, "end_index": 2, "first": 0.4, "last": 0.4, "sum": 0.4, "sum_squares": 0.16, "threshold_class": "within"},
+            {"start_index": 3, "end_index": 3, "first": 1, "last": 1, "sum": 1, "sum_squares": 1, "threshold_class": "within"}
+          ]
+        },
+        "backend": "cad-kernel",
+        "batch_size": 8,
+        "peak_memory_mib": 1,
+        "acceptance_criteria": {
+          "minimum_within_tolerance_percent": 99,
+          "minimum_observed_coverage_percent": 95,
+          "maximum_distance": 0.15,
+          "percentile_gates": [
+            {
+              "percentile": 50,
+              "maximum_distance": 0.05
+            },
+            {
+              "percentile": 95,
+              "maximum_distance": 0.1
+            },
+            {
+              "percentile": 98,
+              "maximum_distance": 0.11
+            },
+            {
+              "percentile": 99,
+              "maximum_distance": 0.12
+            }
+          ]
+        },
+        "acceptance_status": "pass",
+        "eligible_count": 4
+      },
+      {
+        "id": "step-to-cloud-critical",
+        "direction": "authority-to-cloud",
+        "metric_kind": "point-to-point",
+        "signedness": "unsigned",
+        "comparison_frame": "cad",
+        "transform_ids": [
+          "source-to-cad"
+        ],
+        "semantic_target": {
+          "component_id": "main-body",
+          "feature_id": "body-envelope",
+          "surface_role": "fit-surface",
+          "surface_class": "plane"
+        },
+        "query_artifact_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+        "target_artifact_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "mask_ids": [
+          "critical-body"
+        ],
+        "exclusion_ids": [],
+        "observed_coverage_percent": 100,
+        "coverage_basis": "query-points",
+        "completeness": "complete-observed",
+        "normal_agreement": {
+          "applicability": "not-applicable",
+          "source_normal_quality": "absent",
+          "quality_evidence": "source point record is XYZ without normal columns",
+          "evaluated_count": 0,
+          "reason": "synthetic XYZ source has no normals"
+        },
+        "section_trim_evidence": {
+          "defining_section_ids": [
+            "body-mid-section"
+          ],
+          "trim_boundary_ids": [
+            "body-plan-trim"
+          ],
+          "evidence_sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+          "passed": true
+        },
+        "unobserved_face_treatment": "none-unobserved",
+        "evaluated_count": 4,
+        "tolerance": 0.2,
+        "within_tolerance_percent": 100,
+        "mean": 0.0525,
+        "rms": 0.06689544080129826,
+        "percentiles": [
+          {
+            "percentile": 50,
+            "distance": 0.04
+          },
+          {
+            "percentile": 95,
+            "distance": 0.1095
+          },
+          {
+            "percentile": 98,
+            "distance": 0.1158
+          },
+          {
+            "percentile": 99,
+            "distance": 0.1179
+          }
+        ],
+        "maximum": 0.12,
+        "realizability_certificate": {
+          "version": "normalized-blocks-v1",
+          "scale": 0.12,
+          "blocks": [
+            {"start_index": 0, "end_index": 0, "first": 0.08333333333333334, "last": 0.08333333333333334, "sum": 0.08333333333333334, "sum_squares": 0.006944444444444446, "threshold_class": "within"},
+            {"start_index": 1, "end_index": 1, "first": 0.25, "last": 0.25, "sum": 0.25, "sum_squares": 0.0625, "threshold_class": "within"},
+            {"start_index": 2, "end_index": 2, "first": 0.4166666666666667, "last": 0.4166666666666667, "sum": 0.4166666666666667, "sum_squares": 0.17361111111111113, "threshold_class": "within"},
+            {"start_index": 3, "end_index": 3, "first": 1, "last": 1, "sum": 1, "sum_squares": 1, "threshold_class": "within"}
+          ]
+        },
+        "backend": "stdlib-bounded",
+        "batch_size": 8,
+        "peak_memory_mib": 1,
+        "acceptance_criteria": {
+          "minimum_within_tolerance_percent": 99,
+          "minimum_observed_coverage_percent": 95,
+          "maximum_distance": 0.15,
+          "percentile_gates": [
+            {
+              "percentile": 50,
+              "maximum_distance": 0.06
+            },
+            {
+              "percentile": 95,
+              "maximum_distance": 0.11
+            },
+            {
+              "percentile": 98,
+              "maximum_distance": 0.12
+            },
+            {
+              "percentile": 99,
+              "maximum_distance": 0.13
+            }
+          ]
+        },
+        "acceptance_status": "pass",
+        "eligible_count": 4
+      }
+    ]
+  }
+}

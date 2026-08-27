@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "hash_algorithm": "sha256-tree-v1",
+  "source": {
+    "repository": "https://github.com/earthtojake/text-to-cad",
+    "tag": "0.4.26",
+    "commit": "b97ff01f3f34ff0c87c84d1e9a6bd42d3cec21ed",
+    "parity": "All 12 skill directories were verified byte-for-byte against this tag."
+  },
+  "imported_in": "e952dac6c08b965394913e77460fc0482787eb2f",
+  "upstream_observation": {
+    "observed_at": "2026-08-27",
+    "version": "0.4.28",
+    "commit": "0e94cd1d2b5fa2013d89aa9504ecadcf16ce39f6",
+    "policy": "Informational only; this is not the locked source and does not imply parity."
+  },
+  "skills": [
+    {
+      "path": "skills/bambu-labs",
+      "files": 7,
+      "sha256": "ba843f7e09c8ddd32d284b19ca0a14d0f6cb0c8c1b7dc3182d6cb0b445e5060d"
+    },
+    {
+      "path": "skills/cad",
+      "files": 117,
+      "sha256": "4bce9335c02eccc8314a71cae1c8b37d09470743905b4a34024df218127cfc73"
+    },
+    {
+      "path": "skills/cad-viewer",
+      "files": 311,
+      "sha256": "e8e26e7cb4dc0751d05853fa30ea3e835fb8fe47993577d6af13e25ee9a6fb27"
+    },
+    {
+      "path": "skills/dfam-check",
+      "files": 6,
+      "sha256": "5e564ba4c558316279435e277340830ea5b2b968f7ae6e46ccc27f236eb414c6"
+    },
+    {
+      "path": "skills/dxf",
+      "files": 97,
+      "sha256": "29d039239f8b7344b348ca2424d6ee59649a6b731a50b294e856d051511a065c"
+    },
+    {
+      "path": "skills/gcode",
+      "files": 6,
+      "sha256": "3cc095b6ca6777518b0eff07ec06840dacc1c77cb6bb058ba92da331f0d1bb5c"
+    },
+    {
+      "path": "skills/implicit-cad",
+      "files": 160,
+      "sha256": "14260e8c9fa779dc9eb50fa8ac5c8e978473d76512f8c7316b2acd8a5956a205"
+    },
+    {
+      "path": "skills/sdf",
+      "files": 103,
+      "sha256": "6651afcec00608429b901bad80b8cf7145a342fe688bbf4d7caecc1a44ff8f30"
+    },
+    {
+      "path": "skills/sendcutsend",
+      "files": 5,
+      "sha256": "40828371bb776cce39ebcf3120dceec309f9c548105c391549a87dc4f34171e8"
+    },
+    {
+      "path": "skills/srdf",
+      "files": 99,
+      "sha256": "9e99aa913f7c63fb259aa77bc3e8efcd475c6cb8b082f18b5793cffd458449c6"
+    },
+    {
+      "path": "skills/step-parts",
+      "files": 5,
+      "sha256": "28d8554887cdb77f0408c1ddeeab9eeba54f14f1d1d5c7c7cbaebc7cf3d0766a"
+    },
+    {
+      "path": "skills/urdf",
+      "files": 100,
+      "sha256": "2f2bd8d8d63537f734df1a11151d8b521347cde4fcfbf6c3d9569fc6962d8a51"
+    }
+  ]
+}

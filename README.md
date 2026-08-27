@@ -25,6 +25,32 @@ The plugin separates four roles that are often forced into one tool:
 
 The recommended hybrid route uses Open3D/CloudCompare for evidence, a versioned feature-contract JSON for handoff, OpenCascade for production STEP, and Blender or a browser for AI-operated review. A display mesh or evaluated Blender object never silently replaces the production B-rep.
 
+### Executable evidence contract
+
+The point-cloud skill now includes a Draft 2020-12 feature-contract schema, a dependency-free semantic validator, and bounded deterministic point-cloud canaries. The contract records source and derivative identities, calibrated units, explicit row-major transforms, modelling authority, component intent, raw and regularised parameters, masks, uncertainty, semantic checks, coverage, validation tier, and deliverable gates. Contract v1 accepts exactly one independently validated component; assemblies use one contract per component so a component-global score cannot masquerade as assembly-wide coverage. Every acceptance result owns exactly one global or critical-feature mask; global and local results are separate in both directions, evaluate every eligible point, and gate exactly P50/P95/P98/P99 plus maximum, coverage, uncertainty, and any applicable normal checks. A critical mask must identify the exact feature and have a distinct canonical definition from its component's global mask.
+
+Every distance result and every applicable normal summary carries a compact `normalized-blocks-v1` realizability certificate. The validator recomputes threshold count, mean, percentile, and maximum facts—plus RMS for distance results—from contiguous sorted blocks and rejects impossible combinations; the evidence helper emits the same certificate from its measured distances. These checks use the schema's documented finite binary64 comparison envelope (relative tolerance `1e-12`, zero absolute tolerance). They prove numerical realizability, not that a self-attested certificate came from the named source artifact. Contract v1 therefore accepts unsigned distance magnitudes only; signed-bias certification remains outside v1.
+
+```bash
+python3 skills/point-cloud-reverse-engineering/scripts/validate_feature_contract.py \
+  skills/point-cloud-reverse-engineering/assets/feature-contract.example.json --pretty
+
+python3 skills/point-cloud-reverse-engineering/scripts/point_cloud_evidence.py \
+  --pretty fingerprint scan.xyz
+
+python3 skills/point-cloud-reverse-engineering/scripts/point_cloud_evidence.py \
+  --pretty sample scan.xyz --role measurement --count 2000 --frame scan-mm \
+  --output measurement.xyz
+
+python3 skills/point-cloud-reverse-engineering/scripts/point_cloud_evidence.py \
+  --pretty distance measurement.xyz model-sample.xyz --frame cad-mm \
+  --tolerance 0.20 --max-a 2000 --max-b 2000
+```
+
+Validator output separates `contract_valid` from the derived `evidence_status` (`pass`, `fail`, `inconclusive`, or `not-evaluated`); `ok` is true only when the contract is valid and its required evidence passes. Evidence-helper output instead uses `operation_ok` to report successful execution. Fingerprint, sample, and raw distance operations remain `not-evaluated` until their measurements are placed under explicit acceptance criteria, while the transform canary can directly pass or fail its declared numerical gates.
+
+The bundled distance command is deliberately a bounded point-to-point canary. It accepts strict headerless XYZ-style text/CSV and ASCII PLY, and does not replace feature-local point-to-B-rep queries, semantic surface checks, section comparisons, coverage analysis, or uncertainty accounting in the selected modelling authority. E57, LAS, and LAZ remain supported evidence formats in the contract and external CloudCompare/Open3D routes; they require a capable external reader or an explicitly fingerprinted conversion before using the bundled canary.
+
 ### Blender AI workbench
 
 When Blender is requested, the skill can combine a pinned Blender release, CAD Sketcher, Geometry Nodes, Open3D, and a safety-aware localhost bridge such as Blender Agent Bridge. It keeps a bounded numerical measurement cloud separate from a smaller immutable display sample, builds the smallest native CAD Sketcher feature chain, captures overlay evidence, and reopens the `.blend` in a fresh process through a read-only bridge canary.
@@ -53,7 +79,10 @@ Start a new Codex session after installation. Example requests:
 
 ## Releases and updates
 
-Every push to `main` cuts a semantic release. Commit subjects beginning with `feat` or containing `[minor]` produce a minor bump; `feat!`, `fix!`, or `BREAKING CHANGE` produce a major bump; everything else produces a patch. The release workflow updates both plugin manifests, creates a matching `vX.Y.Z` tag, and publishes a GitHub Release.
+Every non-bot push to `main` cuts a semantic release after the repository quality gate passes. A Conventional Commit `feat` header or `[minor]` marker produces a minor bump; any valid Conventional Commit header containing `!`, or a `BREAKING CHANGE`/`BREAKING-CHANGE` footer, produces a major bump; everything else produces a patch. The workflow updates both versioned plugin manifests, atomically pushes a matching `vX.Y.Z` tag with the release commit, and publishes a GitHub Release with checksums plus two fixed-builder-deterministic, source-map-free archives:
+
+- `core` contains the reverse-engineering, STEP-first CAD, and CAD review skills.
+- `full` preserves all 13 existing reverse-engineering, manufacturing, printing, catalog, and robotics skills.
 
 Refresh and reinstall the latest release with:
 
@@ -63,6 +92,28 @@ codex plugin add point-cloud-reverse-engineering@point-cloud-reverse-engineering
 ```
 
 Start a new Codex session after updating.
+
+## Compatibility and repository checks
+
+[`compatibility.json`](compatibility.json) separates tested tuples, probe-only observations, concrete incompatibilities, and unknowns. By default the preflight reads filesystem and package metadata without launching discovered Blender, CloudCompare, bridge, or CAD runtimes:
+
+```bash
+python3 scripts/compatibility_preflight.py
+python3 scripts/compatibility_preflight.py --strict-route open-source-brep
+python3 scripts/compatibility_preflight.py --probe-executables
+```
+
+`--probe-executables` is an explicit opt-in to bounded background/version/import probes. It never connects an agent bridge or opens geometry, but third-party tools may perform their own cache or configuration initialization. Strict mode passes only when every required component matches recorded compatibility evidence and the integrated route itself is recorded as tested. An installed Blender extension manifest alone remains unverified because it does not prove that the extension is enabled or loadable. Use `--allow-unverified` only when a fully identified probe-only route is acceptable; unknown is never treated as verified.
+
+Before proposing a release, run the same dependency-free behavior gate and deterministic canaries used by CI:
+
+```bash
+python3 scripts/validate_repo.py
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+python3 scripts/build_distributions.py --check
+```
+
+[`vendor-lock.json`](vendor-lock.json) records byte-for-byte provenance for the 12 companion skill trees. [`distribution.json`](distribution.json) defines the two release profiles; configured paths and repository symlinks are rejected by the builder rather than followed into an archive.
 
 ## Requirements and limits
 
@@ -76,6 +127,6 @@ Start a new Codex session after updating.
 
 ## Packaging
 
-This repository is dual-packaged: [`plugin.json`](plugin.json) supports Agent Plugins 1.0.0 clients, while [`.codex-plugin/plugin.json`](.codex-plugin/plugin.json) and [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json) provide native Codex marketplace metadata.
+This repository is dual-packaged: [`plugin.json`](plugin.json) supports Agent Plugins 1.0.0 clients, while [`.codex-plugin/plugin.json`](.codex-plugin/plugin.json) and [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json) provide native Codex marketplace metadata. Pull requests run the repository-owned quality workflow, while pushes to `main` run the same gate before release preparation. A scheduled compatibility workflow publishes a metadata-only, machine-neutral preflight report.
 
 The workflow is based on publicly demonstrated point-cloud reverse-engineering techniques from [Payo Tensile Creator](https://www.youtube.com/@Payo-TensileCreator), independently reproduced and converted into generic operating and verification rules. This project is not affiliated with or endorsed by the creator.
