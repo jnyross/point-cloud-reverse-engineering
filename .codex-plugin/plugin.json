@@ -1,7 +1,7 @@
 {
   "name": "point-cloud-reverse-engineering",
   "version": "0.4.0",
-  "description": "Turn fused point clouds into verified design-intent CAD on desktop or open-source Linux toolchains, with companion CAD and validation skills.",
+  "description": "Turn fused point clouds into verified design-intent CAD with desktop, OpenCascade, browser, mesh-first, or Blender AI-workbench routes.",
   "author": {
     "name": "jnyross",
     "url": "https://github.com/jnyross"
@@ -13,6 +13,11 @@
     "reverse-engineering",
     "cloudcompare",
     "bricscad",
+    "blender",
+    "cad-sketcher",
+    "open3d",
+    "opencascade",
+    "mcp",
     "linux",
     "open-source",
     "cad",
@@ -25,10 +30,21 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Point Cloud Reverse Engineering",
+    "shortDescription": "Verified scan-to-CAD across desktop, OpenCascade, browser, and Blender routes",
+    "longDescription": "Preserve and measure fused point clouds, choose the right modelling authority, reconstruct editable design-intent geometry, use Blender as an optional AI workbench, and validate STEP, DWG, BLEND, or derived STL artifacts with feature-local evidence.",
+    "developerName": "jnyross",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Point-cloud analysis",
+      "Design-intent CAD reconstruction",
+      "Blender AI-workbench guidance",
+      "STEP and STL validation"
+    ],
+    "websiteURL": "https://github.com/jnyross/point-cloud-reverse-engineering",
     "defaultPrompt": [
       "Turn this fused point cloud into verified CAD geometry",
-      "Diagnose this CloudCompare to BricsCAD workflow",
-      "Create and validate this editable STEP model"
+      "Choose and run the best reverse-engineering stack for this scan",
+      "Use Blender and CAD Sketcher as an AI workbench, then validate the production STEP"
     ]
   }
 }

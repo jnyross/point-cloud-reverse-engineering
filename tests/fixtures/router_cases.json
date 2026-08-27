@@ -76,5 +76,41 @@
     "request": "BricsCAD is unavailable on this Linux box. Diagnose the smallest open-source route that preserves the scan alignment and CAD verification gates.",
     "route": "diagnose-and-verify",
     "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-14",
+    "request": "Use Blender, CAD Sketcher, Open3D, and a localhost agent bridge to reconstruct this rigid enclosure, keeping a smaller display cloud separate from the measurement evidence.",
+    "route": "blender-ai-workbench",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-15",
+    "request": "Compare Blender, a tiled browser plus OCCT, CloudCompare plus BricsCAD, and an organic mesh-first workflow for this scan before choosing the modelling authority.",
+    "route": "stack-selection",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-16",
+    "request": "Combine Open3D fitting, Blender agent-operated overlays, and an authoritative OpenCascade STEP generator into one hybrid workflow.",
+    "route": "stack-selection",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-17",
+    "request": "Blender becomes unusable when I instance the full point cloud, and the CAD Sketcher body renders but direct mesh conversion fails. Diagnose this without editing.",
+    "route": "diagnose-and-verify",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-18",
+    "request": "This is an organic forearm scan for a print-fit shell rather than a manufactured part. Decide whether a validated mesh-first STL route is more honest than analytic STEP.",
+    "route": "stack-selection",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-19",
+    "request": "Combine the accepted alignment and regularised parameters from the Blender workbench with an analytic OpenCascade STEP, then compare it against the same fixed cloud masks.",
+    "route": "stack-selection",
+    "mutation": "scoped"
   }
 ]

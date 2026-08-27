@@ -6,15 +6,18 @@ unavailable.
 
 ## Tool mapping
 
-- Use CloudCompare for point-cloud import, inspection, cropping, datum
-  alignment, subsampling, and distance fields.
+- Use CloudCompare and/or Open3D for point-cloud import, inspection, cropping,
+  datum alignment, subsampling, primitive fitting, and bounded distance fields.
 - Use the bundled `$cad` workflow for editable analytic STEP construction.
   Its cadgen/build123d/OpenCascade stack preserves planes, cylinders, radii,
   tangency, patterns, named parameters, and feature intent.
 - Derive STL from the accepted STEP and validate it with the bundled CAD and
   `dfam-check`/trimesh tools. Do not make a scan-following STL authoritative.
 - FreeCAD, OpenSCAD, Blender, and MeshLab are optional. Install one only when a
-  required operation is not already covered by CloudCompare and `$cad`.
+  required operation is not already covered by CloudCompare/Open3D and `$cad`.
+  When Blender is selected for AI-operated review, follow
+  [blender-ai-workbench.md](blender-ai-workbench.md) while keeping `$cad`'s
+  OpenCascade STEP as the production authority.
 
 ## Runtime
 
@@ -53,6 +56,11 @@ results.
 6. Reopen the STEP with an independent OpenCascade reader, then derive and
    structurally validate the STL. Report physical fit and printing as
    unverified until observed.
+7. In a hybrid route, serialize the accepted alignment, feature topology,
+   fitted and regularised parameters, masks, exclusions, and tolerances using
+   the contract in [stack-selection.md](stack-selection.md). Regenerate the
+   STEP from that contract and compare it against the same evidence used in
+   the visual workbench.
 
 The open-source route must meet the same evidence gates as the desktop route.
 Tool substitution never relaxes topology, local-feature, tolerance, or

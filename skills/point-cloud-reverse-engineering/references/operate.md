@@ -16,14 +16,22 @@
 8. Assign evidence roles explicitly: use the point cloud or calibrated specifications for dimensions; use close-up photographs and product references for feature identity, topology, and continuity unless they contain scale evidence; use repetition and symmetry as manufacturing-intent evidence.
 9. Define acceptance before construction: global and critical-feature tolerances, permitted exclusions, cloud-to-CAD versus CAD-to-cloud direction, required percentiles and maximums, and a safe memory/thread budget.
 10. For repeated manufactured features, use one shared parametric definition and instance it unless the evidence supports real variation.
+11. Declare the modelling authority and required deliverables before opening a CAD host. A `.blend`, replayable browser operation chain, editable STEP/DWG, and print-only STL are different contracts and are not interchangeable.
 
 ## Choose the host route
+
+If the host or authority is not already fixed, read
+[stack-selection.md](stack-selection.md) first. Keep numerical evidence,
+interactive review, and production B-rep authority in separate tools when that
+reduces compromise.
 
 The CrealityScan/CloudCompare/BricsCAD sections below remain available when
 those applications are the user's chosen workflow. On Linux, for an
 open-source-only request, or when the proprietary applications are
 unavailable, read and follow [linux-open-source.md](linux-open-source.md)
-instead. Both routes use the same feature-intent and verification gates.
+instead. When Blender, CAD Sketcher, or a Blender agent bridge is requested,
+read [blender-ai-workbench.md](blender-ai-workbench.md). All routes use the
+same feature-intent and verification gates.
 
 ## CrealityScan to CloudCompare
 
@@ -133,3 +141,4 @@ Use this pass only after the analytic baseline satisfies its feature-intent and 
 11. Save the editable STEP or DWG to a new path, reopen it with an independent reader or CAD kernel, and verify solid validity, volume, bounds, surface classes, and zero unsupported freeform surfaces.
 12. Export the selected final body as a suitably tessellated STL when a mesh is requested. Independently verify dimensions, plausible volume, nonzero triangles, zero degenerate triangles, zero boundary and non-manifold edges, and consistent winding.
 13. State what remains unproved. CAD and STL checks do not prove printer-bed suitability, printed accuracy, physical fit, or service performance.
+14. For hybrid work, verify that the feature-contract parameters consumed by the production B-rep model match the accepted fitted and regularised values. Compare the resulting STEP against the same fixed cloud masks; do not validate only the Blender or browser preview.

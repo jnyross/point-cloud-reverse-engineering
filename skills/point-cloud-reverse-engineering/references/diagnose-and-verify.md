@@ -54,6 +54,46 @@ Treat the visible defect as evidence, not as a cosmetic objection. Isolate the f
 
 Stop the process and do not retry the same route at a larger scale. Use bounded point batches, cap numerical-library threads, reuse a fixed mask, and sample diagnostic reverse distances when hidden or unobserved CAD faces make an exhaustive reverse query misleading. Record peak memory and distinguish an unavailable check from a passing result.
 
+### Blender becomes unusable with the evidence cloud
+
+Separate measurement density from display density. Keep the fixed full or
+bounded numerical cloud in Open3D/CloudCompare for fitting and validation, and
+create a separately named voxel sample for Blender display. Record both point
+counts and voxel sizes. Do not rename the display sample as if it were the
+measurement cloud, and never validate against only the display sample.
+
+### CAD Sketcher works interactively but fails headlessly
+
+Record the exact Blender and extension versions and reproduce one small native
+sketch/extrude canary. Some UI operators assume an active interactive tool or
+preloaded node asset. Prefer the add-on's supported UI/operator path; for a
+deterministic headless benchmark, use its native data model only when documented
+or verified by a canary, preload only the asset shipped by that version before
+invoking the normal feature operator, and record the integration path. Do not
+patch installed extension source merely to make the benchmark pass.
+
+### A Blender Curves body renders but will not convert for validation
+
+Do not destructively convert the authority. Duplicate the native Curves object
+and its data, convert the isolated copy with the evaluated modifier stack, run
+mesh/topology checks on that copy, and remove it afterwards. Reopen the saved
+`.blend` in a fresh process and repeat the conversion canary.
+
+### The Blender agent bridge is unavailable
+
+Confirm that the matching add-on version is enabled, the bridge is explicitly
+started, it binds only to loopback, and the MCP client configuration points to
+the same URL and runtime. Exercise a read-only scene-inspection tool before any
+mutation. A client configured or updated mid-session may require a new client
+session; do not treat that lifecycle boundary as a geometry failure.
+
+### The Blender result looks editable but the deliverable requires STEP
+
+A native `.blend` or evaluated mesh is an intermediate workbench artifact, not
+an editable B-rep handoff. Export the accepted alignment and feature contract,
+regenerate the solid through OpenCascade/`$cad` or another declared STEP
+authority, then repeat local and whole-model distance checks on that STEP.
+
 ### The CAD source is shorter but the model is not simpler
 
 Inspect the executed feature graph. Count emitted primitives, profiles, Boolean operations, pattern instances, placements, and independent parameters; loops and helpers can hide the same or greater kernel work behind fewer lines. Keep a source-only refactor only when it improves editability, and do not report it as geometric compression.

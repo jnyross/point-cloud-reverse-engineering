@@ -2,6 +2,6 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "point-cloud-reverse-engineering",
   "version": "0.4.0",
-  "description": "Turns fused 3D scans into verified design-intent CAD and bundles companion skills for CAD creation, viewing, validation, robotics, fabrication, and standard-part workflows.",
+  "description": "Turns fused 3D scans into verified design-intent CAD across desktop, OpenCascade, browser, mesh-first, and Blender AI-workbench routes, with companion creation and validation skills.",
   "license": "MIT"
 }
