@@ -118,6 +118,44 @@ class FeatureContractTests(unittest.TestCase):
         errors = list(Draft202012Validator(schema).iter_errors(self.valid))
         self.assertEqual(errors, [])
 
+    def test_native_fusion_authority_requires_rebuild_edit_restore_and_fresh_outputs(self) -> None:
+        fusion = copy.deepcopy(self.valid)
+        authority = fusion["authority"]
+        authority["kind"] = "fusion_f3d"
+        authority["artifact"]["format"] = "f3d"
+        authority["artifact"]["media_type"] = "application/octet-stream"
+        authority["producer"] = {
+            "tool": "Autodesk Fusion",
+            "tool_version": "2026",
+            "kernel": "Autodesk ShapeManager",
+        }
+        authority["independent_reopen"] = {
+            "passed": True,
+            "tool": "Autodesk Fusion",
+            "tool_version": "2026",
+            "kernel": "Autodesk ShapeManager",
+            "validation_tier": "same-kernel-fresh-process",
+            "notes": "fresh native document reopen",
+        }
+        authority["fusion_validation"] = {
+            "fresh_source_rebuild": True,
+            "edit_restore_probe": True,
+            "source_outputs_fresh": True,
+            "feature_count": 12,
+            "body_count": 3,
+            "build_warning_count": 0,
+        }
+
+        self.assertEqual(validate_instance(fusion, self.schema), [])
+        self.assertTrue(validate_contract(fusion)["contract_valid"])
+
+        stale = copy.deepcopy(fusion)
+        stale["authority"]["fusion_validation"]["source_outputs_fresh"] = False
+        self.assertIn(
+            "schema.const",
+            {item["code"] for item in validate_contract(stale)["errors"]},
+        )
+
     def test_canonical_negative_fixtures_fail_for_expected_reasons(self) -> None:
         transform = validate_contract(load_json_strict(ASSETS / "contracts" / "feature-contract.invalid-transform.json"))
         authority = validate_contract(load_json_strict(ASSETS / "contracts" / "feature-contract.invalid-authority.json"))

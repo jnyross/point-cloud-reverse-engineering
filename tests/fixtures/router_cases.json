@@ -232,5 +232,29 @@
     "request": "A hybrid point-cloud workflow.",
     "route": "read-only",
     "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-40-direct-fusion",
+    "request": "Build this non-aligned point cloud from scratch as a native Autodesk Fusion F3D model and export verified STEP plus per-body STL files.",
+    "route": "operate",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-41-advisory-fusion",
+    "request": "Should we use Autodesk Fusion or OpenCascade for this rigid enclosure point cloud?",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-42-hybrid-fusion",
+    "request": "Combine Open3D point fitting with a native Fusion build and per-body export validation.",
+    "route": "stack-selection",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-43-bare-fusion",
+    "request": "A Fusion workflow for this point cloud.",
+    "route": "fallback",
+    "mutation": "none"
   }
 ]

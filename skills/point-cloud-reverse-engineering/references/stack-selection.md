@@ -26,8 +26,8 @@ silently become measurement evidence or modelling authority.
 
 ## Decide from disqualifiers first
 
-1. Identify the required primary authority: editable STEP/DWG, native BLEND,
-   replayable OCCT chain, or procedural mesh/STL-only.
+1. Identify the required primary authority: native Fusion F3D, editable
+   STEP/DWG, native BLEND, replayable OCCT chain, or procedural mesh/STL-only.
 2. Classify critical geometry as manufactured analytic, section-controlled,
    freeform manufactured skin, organic scan-following, or mixed by component.
 3. Reject a route that cannot represent the required authority, topology,
@@ -48,6 +48,7 @@ works; `unknown`, probe-only, and concrete incompatibility remain distinct.
 
 | Route | Best use | Authority | Main limitation |
 | --- | --- | --- | --- |
+| Open3D/CloudCompare + Autodesk Fusion | Agent-operated rigid manufactured products, native parametric editability, multi-body assemblies, and visual-fidelity review | Native F3D plus derived STEP | Proprietary desktop GUI/API; weak fit for headless CI or organic geometry |
 | CrealityScan/CloudCompare + BricsCAD | Existing desktop workflow, local point-cloud sketching, guide-rail lofts and stitched surfaces | DWG/3DSOLID or exported STEP | Proprietary and GUI-dependent |
 | Open3D/CloudCompare + bundled `$cad` | Scripted manufactured reconstruction and manufacturing output | OpenCascade STEP | Less interactive point-cloud authoring |
 | Blender + CAD Sketcher + local bridge | AI-operated overlays, scene evidence, simple constrained profiles and exception handling | Native BLEND during exploration; regenerate STEP elsewhere if required | Display-density and extension-version pressure; no implied B-rep authority |
@@ -111,6 +112,8 @@ schema proves contract shape, not correctness of its geometric evidence.
 
 - Desktop CloudCompare/BricsCAD: follow [operate.md](operate.md) after the shared
   preconstruction gates.
+- Autodesk Fusion: follow
+  [autodesk-fusion.md](authorities/autodesk-fusion.md).
 - Linux analytic B-rep: follow [linux-open-source.md](linux-open-source.md).
 - Blender/CAD Sketcher: follow
   [blender-ai-workbench.md](authorities/blender-ai-workbench.md).

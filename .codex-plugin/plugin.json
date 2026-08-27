@@ -1,7 +1,7 @@
 {
   "name": "point-cloud-reverse-engineering",
   "version": "0.6.0",
-  "description": "Turn fused point clouds into calibrated, evidence-gated CAD with desktop, OpenCascade, browser, mesh-first, or Blender AI-workbench routes.",
+  "description": "Turn fused point clouds into calibrated, evidence-gated CAD with Autodesk Fusion, desktop, OpenCascade, browser, mesh-first, or Blender routes.",
   "author": {
     "name": "jnyross",
     "url": "https://github.com/jnyross"
@@ -14,6 +14,7 @@
     "cloudcompare",
     "bricscad",
     "blender",
+    "fusion-360",
     "cad-sketcher",
     "open3d",
     "opencascade",
@@ -30,21 +31,23 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Point Cloud Reverse Engineering",
-    "shortDescription": "Verified scan-to-CAD across desktop, OpenCascade, browser, and Blender routes",
-    "longDescription": "Preserve and measure fused point clouds, choose the right modelling authority, reconstruct editable design-intent geometry, use Blender as an optional AI workbench, and validate STEP, DWG, BLEND, or derived STL artifacts with feature-local evidence.",
+    "shortDescription": "Verified scan-to-CAD across Fusion, desktop, OpenCascade, browser, and Blender routes",
+    "longDescription": "Preserve and measure fused point clouds, choose the right modelling authority, reconstruct editable design-intent geometry in Autodesk Fusion or another supported authority, and validate F3D, STEP, DWG, BLEND, or derived STL artifacts with feature-local evidence.",
     "developerName": "jnyross",
     "category": "Developer Tools",
     "capabilities": [
       "Point-cloud analysis",
       "Executable evidence contracts",
       "Design-intent CAD reconstruction",
+      "Autodesk Fusion native-authority guidance",
       "Blender AI-workbench guidance",
-      "Authority-specific STEP, BLEND, and STL validation"
+      "Authority-specific F3D, STEP, BLEND, and STL validation"
     ],
     "websiteURL": "https://github.com/jnyross/point-cloud-reverse-engineering",
     "defaultPrompt": [
       "Turn this fused point cloud into verified CAD geometry",
       "Choose and run the best reverse-engineering stack for this scan",
+      "Build this scan from scratch as a native Autodesk Fusion model and prove editability",
       "Use Blender and CAD Sketcher as an AI workbench, then validate the production STEP",
       "Validate this scan-to-CAD feature contract and identify any unsupported evidence claims"
     ]

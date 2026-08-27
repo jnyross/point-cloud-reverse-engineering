@@ -14,8 +14,9 @@ unavailable checks separately; an unavailable check is not a pass.
 3. Assign each input an evidence role. Point clouds and independently
    calibrated specifications may establish dimensions; photographs normally
    establish feature identity, topology, occlusion, and continuity only.
-4. Declare the authority before construction: editable STEP/DWG, native
-   `.blend`, replayable OCCT operation chain, or procedural mesh plus STL.
+4. Declare the authority before construction: native Fusion `.f3d`, editable
+   STEP/DWG, native `.blend`, replayable OCCT operation chain, or procedural
+   mesh plus STL.
    Declare every requested derived artifact separately.
 5. Record each critical feature's component, defining frame or section,
    primitive or mesh intent, G0/G1/G2 continuity where applicable, raw fit,
@@ -198,6 +199,21 @@ additional gates for every requested derived deliverable.
   repeated-feature transforms, and defining sections.
 - Regenerate any STL from the accepted B-rep. A mesh imported into CAD does not
   satisfy editable analytic STEP/DWG authority.
+
+### Native Fusion F3D authority
+
+- Preserve the build-source bundle, parameter contract, native document,
+  component/body identities, feature inventory, analytic surface classes,
+  constraints, units, and source-to-Fusion transform.
+- Require a fresh-source rebuild with zero warnings and prove editability with a
+  bounded parameter edit, recompute, expected geometry change, restore, and
+  recompute before saving the accepted `.f3d`.
+- Reopen the native document in a fresh Fusion process and repeat feature, body,
+  bounds, volume, parameter, and critical-section checks. Treat this as a
+  same-kernel gate, not independent STEP validation.
+- Apply the editable STEP/DWG gate to a requested STEP export. Validate one STL
+  per accepted body; a combined assembly STL used for overlays does not waive
+  per-body manifold and self-intersection checks.
 
 ### Native BLEND authority
 

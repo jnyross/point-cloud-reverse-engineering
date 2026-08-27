@@ -175,6 +175,13 @@
       "unknown": [
         "BricsCAD edition, release, licence, and installed point-cloud modules"
       ]
+    },
+    "autodesk_fusion": {
+      "status": "unknown",
+      "unknown": [
+        "Fusion release, licence state, platform, scripting/API behavior, and computer-control availability",
+        "Native feature and export behavior until the route's live bounded canaries pass"
+      ]
     }
   },
   "tested_stack": {
@@ -190,6 +197,15 @@
     "cloudcompare": "2.13.2"
   },
   "routes": {
+    "fusion-360": {
+      "required_components": [
+        "autodesk_fusion"
+      ],
+      "tested": false,
+      "unknowns": [
+        "Fusion is deployment-specific and requires live native build, reopen, edit-restore, and export canaries"
+      ]
+    },
     "blender-ai-workbench": {
       "required_components": [
         "blender",
