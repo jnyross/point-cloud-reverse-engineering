@@ -16,7 +16,7 @@ unavailable.
 - FreeCAD, OpenSCAD, Blender, and MeshLab are optional. Install one only when a
   required operation is not already covered by CloudCompare/Open3D and `$cad`.
   When Blender is selected for AI-operated review, follow
-  [blender-ai-workbench.md](blender-ai-workbench.md) while keeping `$cad`'s
+  [blender-ai-workbench.md](authorities/blender-ai-workbench.md) while keeping `$cad`'s
   OpenCascade STEP as the production authority.
 
 ## Runtime
@@ -39,8 +39,9 @@ results.
 
 ## Workflow
 
-1. Apply Checkpoint 0 in `operate.md`, preserving the original point cloud and
-   declaring feature-local and whole-model gates before construction.
+1. Apply the [shared evidence and validation contract](shared/evidence-and-validation.md),
+   including source fingerprint, unit calibration, transform checks, uncertainty
+   budget, fixed validation masks, and feature-local acceptance before construction.
 2. Import and align a reversible copy in CloudCompare. Verify entity type,
    units, point count, datum orientation, and bounds before and after export.
    A display is optional: use CloudCompare's command line for supported batch
@@ -53,15 +54,17 @@ results.
 5. Run CAD facts, surface-type, solid-validity, section, and snapshot checks.
    Run cloud-to-CAD and feature-local distances in bounded batches using the
    fixed alignment and masks.
-6. Reopen the STEP with an independent OpenCascade reader, then derive and
-   structurally validate the STL. Report physical fit and printing as
-   unverified until observed.
+6. Reopen the STEP in a fresh process and name it Tier 1 when it uses the same
+   importer/kernel. Use an alternate importer or cross-kernel consumer for a
+   stronger tier when available, then derive and structurally validate the STL.
+   Report physical fit and printing as unverified until observed.
 7. In a hybrid route, serialize the accepted alignment, feature topology,
    fitted and regularised parameters, masks, exclusions, and tolerances using
    the contract in [stack-selection.md](stack-selection.md). Regenerate the
    STEP from that contract and compare it against the same evidence used in
    the visual workbench.
 
-The open-source route must meet the same evidence gates as the desktop route.
-Tool substitution never relaxes topology, local-feature, tolerance, or
-resource-use requirements.
+Apply the shared editable STEP/DWG completion gate and every requested derived
+artifact gate. The open-source route must meet the same evidence gates as the
+desktop route. Tool substitution never relaxes topology, local-feature,
+uncertainty, tolerance, independence, or resource-use requirements.

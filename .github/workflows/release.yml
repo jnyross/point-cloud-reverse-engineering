@@ -3,46 +3,240 @@ name: release
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: release
   cancel-in-progress: false
 
 jobs:
-  release:
+  prepare:
+    if: github.actor != 'github-actions[bot]' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    outputs:
+      base: ${{ steps.prepare.outputs.base }}
+      current: ${{ steps.prepare.outputs.current }}
+      mode: ${{ steps.prepare.outputs.mode }}
+      version: ${{ steps.prepare.outputs.version }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v7
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
-          python-version: "3.x"
-      - name: validate release logic and manifests
+          python-version: "3.13"
+      - name: install pinned formal schema validator
+        run: "python3 -m pip install --disable-pip-version-check --only-binary=:all: jsonschema==4.26.0"
+      - name: validate release candidate
         run: |
           python3 scripts/release.py --self-test
-          python3 -m json.tool plugin.json >/dev/null
-          python3 -m json.tool .codex-plugin/plugin.json >/dev/null
-          python3 -c "import json; assert json.load(open('plugin.json'))['version'] == json.load(open('.codex-plugin/plugin.json'))['version']"
-      - id: bump
+          python3 scripts/compatibility_preflight.py --self-test
+          python3 scripts/validate_repo.py
+          python3 -m unittest discover -s tests -p "test_*.py" -v
+          python3 scripts/build_distributions.py --check
+      - id: prepare
+        name: prepare bounded release payload
+        shell: bash
         run: |
+          set -euo pipefail
+          BASE=$(git rev-parse HEAD)
           CURRENT=$(python3 -c "import json; print(json.load(open('plugin.json'))['version'])")
           VERSION=$(python3 scripts/release.py)
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
-      - name: cut release
-        if: steps.bump.outputs.version != steps.bump.outputs.current
+          if [[ ! "$BASE" =~ ^[0-9a-f]{40}$ ]] || [[ ! "$CURRENT" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]] || [[ ! "$VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "::error::release preparation produced malformed state"
+            exit 1
+          fi
+          TAG="v$VERSION"
+          if [ "$VERSION" != "$CURRENT" ]; then
+            MODE=new
+            CHANGED=$(git diff --name-only | sort)
+            EXPECTED=$(printf '.codex-plugin/plugin.json\nplugin.json')
+            if [ "$CHANGED" != "$EXPECTED" ]; then
+              echo "::error::release bump changed files outside the two versioned manifests"
+              exit 1
+            fi
+            python3 scripts/validate_repo.py
+          else
+            MODE=repair
+            if ! git diff --quiet || ! git show-ref --verify --quiet "refs/tags/$TAG" || [ "$(git rev-list -n 1 "$TAG")" != "$BASE" ]; then
+              echo "::error::no unreleased commits, but HEAD is not the matching clean release tag"
+              exit 1
+            fi
+          fi
+          python3 scripts/build_distributions.py --output-dir dist
+          mkdir -p release-state
+          printf '%s\n' "$BASE" > release-state/base
+          printf '%s\n' "$CURRENT" > release-state/current
+          printf '%s\n' "$MODE" > release-state/mode
+          printf '%s\n' "$VERSION" > release-state/version
+          {
+            echo "base=$BASE"
+            echo "current=$CURRENT"
+            echo "mode=$MODE"
+            echo "version=$VERSION"
+          } >> "$GITHUB_OUTPUT"
+      - name: upload bounded release payload
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: release-preparation-${{ github.run_id }}
+          path: |
+            release-state
+            plugin.json
+            .codex-plugin/plugin.json
+            dist/*.zip
+            dist/SHA256SUMS
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 1
+
+  publish:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - name: download bounded release payload
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: release-preparation-${{ github.run_id }}
+          path: prepared
+      - id: stage
+        name: validate state and stage local release
+        shell: bash
         env:
-          GH_TOKEN: ${{ github.token }}
+          EXPECTED_BASE: ${{ needs.prepare.outputs.base }}
+          EXPECTED_CURRENT: ${{ needs.prepare.outputs.current }}
+          EXPECTED_MODE: ${{ needs.prepare.outputs.mode }}
+          EXPECTED_VERSION: ${{ needs.prepare.outputs.version }}
         run: |
-          git config user.name "release-bot"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add plugin.json .codex-plugin/plugin.json
-          git commit -m "chore(release): v${{ steps.bump.outputs.version }}"
-          git tag "v${{ steps.bump.outputs.version }}"
-          git push origin HEAD:main
-          git push origin "v${{ steps.bump.outputs.version }}"
-          gh release create "v${{ steps.bump.outputs.version }}" --generate-notes --title "v${{ steps.bump.outputs.version }}"
+          set -euo pipefail
+          read -r BASE < prepared/release-state/base
+          read -r CURRENT < prepared/release-state/current
+          read -r MODE < prepared/release-state/mode
+          read -r VERSION < prepared/release-state/version
+          if [[ ! "$BASE" =~ ^[0-9a-f]{40}$ ]] || [[ ! "$CURRENT" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]] || [[ ! "$VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]] || [[ ! "$MODE" =~ ^(new|repair)$ ]]; then
+            echo "::error::downloaded release state is malformed"
+            exit 1
+          fi
+          if [ "$BASE" != "$EXPECTED_BASE" ] || [ "$CURRENT" != "$EXPECTED_CURRENT" ] || [ "$MODE" != "$EXPECTED_MODE" ] || [ "$VERSION" != "$EXPECTED_VERSION" ]; then
+            echo "::error::downloaded release state differs from prepare-job outputs"
+            exit 1
+          fi
+          git cat-file -e "$BASE^{commit}"
+          python3 -c 'import json,sys; expected=sys.argv[1]; paths=sys.argv[2:]; data=[json.load(open(path)) for path in paths]; valid=all(item.get("name") == "point-cloud-reverse-engineering" and item.get("version") == expected for item in data); raise SystemExit(0 if valid else "prepared manifest identity mismatch")' "$VERSION" prepared/plugin.json prepared/.codex-plugin/plugin.json
+          test -f "prepared/dist/point-cloud-reverse-engineering-$VERSION-core.zip"
+          test -f "prepared/dist/point-cloud-reverse-engineering-$VERSION-full.zip"
+          test "$(find prepared/dist -maxdepth 1 -type f -name '*.zip' | wc -l)" -eq 2
+          python3 -c 'import re,sys; version,path=sys.argv[1:]; expected={f"point-cloud-reverse-engineering-{version}-core.zip",f"point-cloud-reverse-engineering-{version}-full.zip"}; lines=open(path,encoding="utf-8").read().splitlines(); matches=[re.fullmatch(r"([0-9a-f]{64})  ([^/\\]+)",line) for line in lines]; valid=len(matches)==2 and all(matches) and {match.group(2) for match in matches}==expected; raise SystemExit(0 if valid else "invalid SHA256SUMS entries")' "$VERSION" prepared/dist/SHA256SUMS
+          (cd prepared/dist && sha256sum --check SHA256SUMS)
+          TAG="v$VERSION"
+          if [ "$MODE" = repair ]; then
+            if [ "$CURRENT" != "$VERSION" ] || ! git show-ref --verify --quiet "refs/tags/$TAG" || [ "$(git rev-list -n 1 "$TAG")" != "$BASE" ]; then
+              echo "::error::repair state does not identify the prepared tagged base"
+              exit 1
+            fi
+            git merge-base --is-ancestor "$TAG" HEAD
+            cmp --silent <(git show "$TAG:plugin.json") prepared/plugin.json
+            cmp --silent <(git show "$TAG:.codex-plugin/plugin.json") prepared/.codex-plugin/plugin.json
+            PUBLISH_MODE=repair
+          elif git show-ref --verify --quiet "refs/tags/$TAG"; then
+            TAG_COMMIT=$(git rev-list -n 1 "$TAG")
+            if [ "$(git rev-parse "$TAG_COMMIT^")" != "$BASE" ]; then
+              echo "::error::existing release tag is not the prepared base's release commit"
+              exit 1
+            fi
+            git merge-base --is-ancestor "$TAG_COMMIT" HEAD
+            CHANGED=$(git diff --name-only "$BASE" "$TAG_COMMIT" | sort)
+            EXPECTED=$(printf '.codex-plugin/plugin.json\nplugin.json')
+            if [ "$CHANGED" != "$EXPECTED" ]; then
+              echo "::error::existing release tag changed files outside the versioned manifests"
+              exit 1
+            fi
+            cmp --silent <(git show "$TAG:plugin.json") prepared/plugin.json
+            cmp --silent <(git show "$TAG:.codex-plugin/plugin.json") prepared/.codex-plugin/plugin.json
+            PUBLISH_MODE=repair
+          else
+            if [ "$CURRENT" = "$VERSION" ] || [ "$(git rev-parse HEAD)" != "$BASE" ]; then
+              echo "::error::main advanced after release preparation; a newer main event must retry"
+              exit 1
+            fi
+            git checkout --detach "$BASE"
+            cp prepared/plugin.json plugin.json
+            cp prepared/.codex-plugin/plugin.json .codex-plugin/plugin.json
+            CHANGED=$(git diff --name-only | sort)
+            EXPECTED=$(printf '.codex-plugin/plugin.json\nplugin.json')
+            if [ "$CHANGED" != "$EXPECTED" ]; then
+              echo "::error::staged release differs from the bounded manifest-only change"
+              exit 1
+            fi
+            git config user.name "release-bot"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -am "chore(release): $TAG"
+            git tag "$TAG"
+            PUBLISH_MODE=push
+          fi
+          TAG_COMMIT=$(git rev-list -n 1 "$TAG")
+          {
+            echo "base=$BASE"
+            echo "mode=$PUBLISH_MODE"
+            echo "tag=$TAG"
+            echo "tag_commit=$TAG_COMMIT"
+          } >> "$GITHUB_OUTPUT"
+      - name: atomically publish or repair GitHub release
+        shell: bash
+        env:
+          BASE: ${{ steps.stage.outputs.base }}
+          GH_TOKEN: ${{ github.token }}
+          PUBLISH_MODE: ${{ steps.stage.outputs.mode }}
+          TAG: ${{ steps.stage.outputs.tag }}
+          TAG_COMMIT: ${{ steps.stage.outputs.tag_commit }}
+        run: |
+          set -euo pipefail
+          gh auth setup-git
+          REMOTE_HEAD=$(git ls-remote origin refs/heads/main | awk '{print $1}')
+          REMOTE_TAG=$(git ls-remote origin "refs/tags/$TAG" "refs/tags/$TAG^{}" | tail -n 1 | awk '{print $1}')
+          if [ "$PUBLISH_MODE" = push ]; then
+            if [ "$REMOTE_HEAD" != "$BASE" ] || [ -n "$REMOTE_TAG" ]; then
+              echo "::error::remote main or tag changed after release staging; refusing to publish"
+              exit 1
+            fi
+            git push --atomic origin HEAD:refs/heads/main "refs/tags/$TAG:refs/tags/$TAG"
+          elif [ "$PUBLISH_MODE" = repair ]; then
+            if [ "$REMOTE_TAG" != "$TAG_COMMIT" ]; then
+              echo "::error::remote release tag changed before repair"
+              exit 1
+            fi
+          else
+            echo "::error::unknown publish mode"
+            exit 1
+          fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            VERSION=${TAG#v}
+            EXISTING=$(mktemp -d)
+            if gh release download "$TAG" --dir "$EXISTING" \
+                --pattern "SHA256SUMS" \
+                --pattern "point-cloud-reverse-engineering-$VERSION-core.zip" \
+                --pattern "point-cloud-reverse-engineering-$VERSION-full.zip" \
+                && cmp --silent "$EXISTING/SHA256SUMS" prepared/dist/SHA256SUMS \
+                && cmp --silent "$EXISTING/point-cloud-reverse-engineering-$VERSION-core.zip" "prepared/dist/point-cloud-reverse-engineering-$VERSION-core.zip" \
+                && cmp --silent "$EXISTING/point-cloud-reverse-engineering-$VERSION-full.zip" "prepared/dist/point-cloud-reverse-engineering-$VERSION-full.zip"; then
+              echo "release assets already match the prepared payload"
+            else
+              gh release upload "$TAG" prepared/dist/*.zip prepared/dist/SHA256SUMS --clobber
+            fi
+          else
+            gh release create "$TAG" prepared/dist/*.zip prepared/dist/SHA256SUMS --verify-tag --generate-notes --title "$TAG"
+          fi

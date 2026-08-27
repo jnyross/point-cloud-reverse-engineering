@@ -1,0 +1,4 @@
+interface:
+  display_name: "Point Cloud Reverse Engineering"
+  short_description: "Reconstruct verified CAD from scan evidence"
+  default_prompt: "Use $point-cloud-reverse-engineering to choose the right authority, reconstruct this point cloud, and prove the declared CAD or mesh deliverable with feature-local evidence."

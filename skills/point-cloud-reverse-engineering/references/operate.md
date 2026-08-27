@@ -1,37 +1,35 @@
-# Point-cloud reverse-engineering operator playbook
+# Scoped construction dispatcher and desktop CAD playbook
 
-## Checkpoint 0: establish the source and target
+## Dispatch before loading host details
 
-1. Record the source path, format, point count, units, bounds, intended object, fit surfaces, and requested design intent.
-2. Confirm the primary source is a point cloud. If it is a mesh and a cloud exists, stop and obtain the cloud.
-3. Preserve the scan project and original export. Work only on a clone or separately named copy.
-4. Classify each important feature, not merely the whole part:
-   - **scan-following fit** for a recess or mating surface that must follow measured evidence;
-   - **design-intent geometry** for straight, symmetric, tangent, cylindrical, planar, or otherwise manufactured features;
-   - **freeform skin** for a curved surface governed by splines in two directions;
-   - **section-controlled solid** for a long form whose cross-section changes along an axis.
-5. Record a compact feature-intent contract for each manufactured transition: component, defining view or axis, primitive chain, intended G0/G1/G2 continuity, shared dimensions or symmetry, dimensional evidence, topology evidence, exclusions, and confidence. Treat footprint corner radii and top/bottom perimeter transitions as independent features. Use a sharp transition when no evidence supports a fillet or chamfer.
-6. Keep distinct components such as enclosures, cables, fasteners, and holders as separate solids and layers through overlay acceptance. Union them only when the requested final output requires one body.
-7. Record clearances and thicknesses as tunable design values. Do not derive them silently from tutorial examples.
-8. Assign evidence roles explicitly: use the point cloud or calibrated specifications for dimensions; use close-up photographs and product references for feature identity, topology, and continuity unless they contain scale evidence; use repetition and symmetry as manufacturing-intent evidence.
-9. Define acceptance before construction: global and critical-feature tolerances, permitted exclusions, cloud-to-CAD versus CAD-to-cloud direction, required percentiles and maximums, and a safe memory/thread budget.
-10. For repeated manufactured features, use one shared parametric definition and instance it unless the evidence supports real variation.
-11. Declare the modelling authority and required deliverables before opening a CAD host. A `.blend`, replayable browser operation chain, editable STEP/DWG, and print-only STL are different contracts and are not interchangeable.
+Apply the [shared evidence and validation contract](shared/evidence-and-validation.md)
+and declare the authority before construction. Then dispatch once:
 
-## Choose the host route
+- native Blender/CAD Sketcher authority or Blender workbench: read
+  [blender-ai-workbench.md](authorities/blender-ai-workbench.md) and stop here;
+- replayable browser/OCCT authority: read
+  [browser-occt-workbench.md](authorities/browser-occt-workbench.md) and stop here;
+- organic procedural mesh or STL-only authority: read
+  [organic-mesh-first.md](authorities/organic-mesh-first.md) and stop here;
+- Linux/open-source analytic B-rep authority: read
+  [linux-open-source.md](linux-open-source.md) and stop here;
+- CloudCompare plus BricsCAD/desktop authority: continue below.
 
-If the host or authority is not already fixed, read
-[stack-selection.md](stack-selection.md) first. Keep numerical evidence,
-interactive review, and production B-rep authority in separate tools when that
-reduces compromise.
+If authority is not fixed, do not begin construction. Use the read-only
+[stack-selection.md](stack-selection.md) decision matrix and return with a
+proposed authority and deliverables. Do not treat a `.blend`, browser preview,
+replayable OCCT chain, editable STEP/DWG, and STL-only mesh as interchangeable.
 
-The CrealityScan/CloudCompare/BricsCAD sections below remain available when
-those applications are the user's chosen workflow. On Linux, for an
-open-source-only request, or when the proprietary applications are
-unavailable, read and follow [linux-open-source.md](linux-open-source.md)
-instead. When Blender, CAD Sketcher, or a Blender agent bridge is requested,
-read [blender-ai-workbench.md](blender-ai-workbench.md). All routes use the
-same feature-intent and verification gates.
+## Desktop checkpoint
+
+1. Complete every preconstruction gate in the shared contract, including source
+   identity, unit calibration, alignment, uncertainty budget, feature contract,
+   fixed masks, local/global tolerances, and resource limits.
+2. Classify each feature as scan-following fit, design-intent geometry, freeform
+   skin, or section-controlled solid. Keep components separate through overlay
+   acceptance and instance repeated manufactured features from shared parameters.
+3. Preserve raw fitted values beside regularised dimensions. Treat clearances
+   and wall thicknesses as explicit tunable values, not tutorial defaults.
 
 ## CrealityScan to CloudCompare
 
@@ -121,24 +119,29 @@ Use this pass only after the analytic baseline satisfies its feature-intent and 
 1. Freeze the accepted source, exports, alignment, masks, exclusions, local sections, rendered views, tolerances, and surface inventory. Set an iteration limit and memory/thread budget before experimenting.
 2. Optimise the executed feature graph, not lines of source: count primitives, profiles, Boolean operations, expanded pattern instances, placements, and independent parameters. A loop or helper that emits the same kernel operations is a readability refactor, not geometric compression.
 3. Change one modelling idea at a time. Prefer shared profiles and dimensions, symmetry, orientation-preserving patterns, revolved or swept cuts, and compound Booleans. Couple parameters only when the feature-intent evidence says they are truly shared.
-4. Accept a candidate only when solid validity, bounds, volume, analytic surface classes, radii, continuity, critical sections, rendered feature views, and fixed point-cloud results remain equivalent. When claiming identical geometry, require an exact CAD-kernel or B-rep symmetric-difference check; otherwise describe the result as tolerance-equivalent and rerun the full local and global gates.
+4. Accept a candidate only when solid validity, bounds, volume, analytic surface classes, radii, continuity, critical sections, rendered feature views, and fixed point-cloud results remain equivalent. Claim exact identity only when the kernel proves topological and geometric equality without a tolerance-based approximation. A tolerance-bounded Boolean symmetric-difference check supports only tolerance-equivalence, which still requires the full local and global gates.
 5. Check every repeated instance's placement and orientation locally. Global geometry or a coarse STEP comparison can miss an asymmetric pad, port, or recess rotated by a default polar pattern.
 6. Treat STL triangle counts and mesh-to-mesh differences as diagnostics because tessellation can vary for unchanged analytic geometry. Compare the authoritative STEP or kernel solid, then regenerate and structurally validate the STL.
 7. Keep an accept/reject ledger with the candidate, one change, feature-graph cost delta, gate results, and reason. Revert rejected candidates and stop at the declared iteration limit.
 
-## Verification and export
+## Desktop verification and export
 
-1. Keep the previous accepted artifact and modify only the rejected feature. Compare old and new CAD bounds, major datums, topology counts, and unrelated geometry before accepting the change.
-2. Toggle the full point cloud on after every major body and inspect orthographic, defining-section, close-up, and isometric views.
-3. Query the live drawing or CAD kernel after each material operation. Confirm expected analytic surfaces, `SPLINE`, `LOFTEDSURFACE`, `SURFACE`, `REGION`, and `3DSOLID` counts rather than trusting appearance alone.
-4. Walk the feature-intent contract. For each critical feature, verify the primitive chain, radii, repeated constraints, and intended sharp, G1 tangent, smoothly curved, or chamfered transitions. Reject unintended cones, planar bevels, splines, or step faces even when the model looks close.
-5. Compute a feature-local distance check in the feature's defining frame. Report the evaluated point/cell count, within-tolerance percentage, P95/P98, mean when useful, and maximum residual. Use area-normalized results as a companion to raw point statistics when density is uneven.
-6. Compute the whole-model check separately using a fixed, documented mask and exclusions. Report cloud-to-CAD and CAD-to-cloud directions separately; label hidden or unobserved CAD closure faces rather than silently treating them as measured fit surfaces.
-7. A global threshold cannot waive a failed critical-feature topology or local-distance check. Likewise, a visually convincing screenshot cannot waive the numerical and analytic checks.
-8. Preserve raw fitted values alongside regularised parameters and record the resulting fit change.
-9. Run distance calculations in bounded batches with controlled numerical-library threads. Avoid unnecessarily dense construction meshes, record peak process memory, and stop rather than retrying an approach that destabilizes the workstation.
-10. Keep sketches, separate component solids, and construction bodies until comparison passes.
-11. Save the editable STEP or DWG to a new path, reopen it with an independent reader or CAD kernel, and verify solid validity, volume, bounds, surface classes, and zero unsupported freeform surfaces.
-12. Export the selected final body as a suitably tessellated STL when a mesh is requested. Independently verify dimensions, plausible volume, nonzero triangles, zero degenerate triangles, zero boundary and non-manifold edges, and consistent winding.
-13. State what remains unproved. CAD and STL checks do not prove printer-bed suitability, printed accuracy, physical fit, or service performance.
-14. For hybrid work, verify that the feature-contract parameters consumed by the production B-rep model match the accepted fitted and regularised values. Compare the resulting STEP against the same fixed cloud masks; do not validate only the Blender or browser preview.
+1. Keep the previous accepted artifact and modify only the rejected feature.
+   Compare bounds, datums, entity/topology counts, and unrelated geometry before
+   accepting the change.
+2. Toggle the measurement cloud or bounded fixed evidence after every major body
+   and inspect orthographic, defining-section, close-up, and isometric overlays.
+3. Query the live drawing after each operation. Confirm intended `SPLINE`,
+   `LOFTEDSURFACE`, `SURFACE`, `REGION`, and `3DSOLID` counts, primitive chains,
+   radii, constraints, continuity, and repeated-feature transforms.
+4. Apply every semantic-surface, normal, coverage, section-contour, local, global,
+   uncertainty, and resource gate in the shared contract. Appearance and a
+   whole-model pass cannot waive a critical-feature failure.
+5. Keep sketches, components, and construction bodies until comparison passes.
+   Save STEP/DWG to a new path and apply the editable STEP/DWG authority gate at
+   the strongest available validation tier.
+6. Derive a requested STL from the accepted body and apply its structural and
+   dimensional checks. State that printability and physical fit remain unproved.
+7. For hybrid work, verify the production model consumed the exact accepted
+   alignment, masks, raw fits, regularised values, and tolerances; validate the
+   production artifact rather than only its Blender or browser preview.

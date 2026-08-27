@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "normalization": "NFKC case-fold, split into ASCII alphanumeric word tokens, and normalize hyphenated phrases to spaces.",
+  "evaluation": {
+    "route": "The first route is the Plugin Doctor read-only base. Explicit read-only constraints and explanatory/advisory questions select it first; otherwise evaluate the later effectful routes in order, so 'inspect and rebuild' changes but 'how should we rebuild?' remains advisory.",
+    "mutation": "A read-only constraint or explanatory/advisory question forces none. Otherwise an explicit effectful-route match is scoped; authority vocabulary alone never grants mutation.",
+    "matching": "any_terms match whole normalized words; any_phrases match a contiguous normalized word sequence. Substrings never match."
+  },
+  "intent_rules": {
+    "explicit_read_only_phrases": [
+      "read only",
+      "readonly",
+      "do not change",
+      "don't change",
+      "no edits",
+      "without editing"
+    ],
+    "question_words": [
+      "how",
+      "why",
+      "what",
+      "when",
+      "where",
+      "which",
+      "who",
+      "whose",
+      "whom"
+    ],
+    "advisory_auxiliaries": [
+      "should",
+      "shall",
+      "do",
+      "does",
+      "did",
+      "is",
+      "are",
+      "am",
+      "may",
+      "might"
+    ],
+    "advisory_subjects": [
+      "i",
+      "we"
+    ],
+    "direct_request_auxiliaries": [
+      "can",
+      "could",
+      "would",
+      "will"
+    ],
+    "determiners": [
+      "this",
+      "that",
+      "these",
+      "those",
+      "the",
+      "a",
+      "an"
+    ]
+  },
+  "route_rules": [
+    {
+      "value": "read-only",
+      "any_terms": [
+        "analyze",
+        "architect",
+        "assess",
+        "audit",
+        "blend",
+        "blender",
+        "bridge",
+        "browser",
+        "choose",
+        "compare",
+        "decide",
+        "diagnose",
+        "explain",
+        "hybrid",
+        "inspect",
+        "investigate",
+        "linux",
+        "occt",
+        "opencascade",
+        "organic",
+        "review",
+        "select",
+        "understand"
+      ],
+      "any_phrases": [
+        "cad sketcher",
+        "geometry nodes",
+        "mesh first",
+        "open source"
+      ]
+    },
+    {
+      "value": "linux-open-source",
+      "any_terms": [
+        "containerize",
+        "provision"
+      ]
+    },
+    {
+      "value": "stack-selection",
+      "any_terms": [
+        "combine",
+        "integrate",
+        "orchestrate"
+      ]
+    },
+    {
+      "value": "operate",
+      "any_terms": [
+        "add",
+        "align",
+        "build",
+        "change",
+        "compress",
+        "create",
+        "delete",
+        "edit",
+        "export",
+        "fix",
+        "implement",
+        "loft",
+        "optimise",
+        "optimize",
+        "rebuild",
+        "reconstruct",
+        "refactor",
+        "remove",
+        "repair",
+        "simplify",
+        "stitch",
+        "thicken",
+        "trace",
+        "turn",
+        "update",
+        "write"
+      ]
+    }
+  ],
+  "route_default": "fallback",
+  "mutation_rules": [
+    {
+      "value": "scoped",
+      "any_terms": [
+        "add",
+        "align",
+        "build",
+        "change",
+        "combine",
+        "compress",
+        "containerize",
+        "create",
+        "delete",
+        "edit",
+        "export",
+        "fix",
+        "implement",
+        "integrate",
+        "loft",
+        "optimise",
+        "optimize",
+        "orchestrate",
+        "provision",
+        "rebuild",
+        "reconstruct",
+        "refactor",
+        "remove",
+        "repair",
+        "simplify",
+        "stitch",
+        "thicken",
+        "trace",
+        "turn",
+        "update",
+        "write"
+      ]
+    }
+  ],
+  "mutation_default": "none"
+}

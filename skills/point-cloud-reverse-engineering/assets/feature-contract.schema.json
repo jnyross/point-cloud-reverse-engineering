@@ -1,0 +1,1194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:jnyross:point-cloud-reverse-engineering:feature-contract:1.0.0",
+  "title": "Point-cloud reverse-engineering feature contract",
+  "description": "Portable evidence and modelling-authority contract for exactly one independently accepted component. Assemblies and other multi-component authorities use one contract per accepted component. Matrices are row-major and act on homogeneous column vectors: p_to = M * p_from. Translation terms use units.linear.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_id",
+    "units",
+    "frames",
+    "transforms",
+    "source",
+    "samples",
+    "authority",
+    "components",
+    "parameters",
+    "masks",
+    "exclusions",
+    "uncertainty",
+    "validation"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "contract_id": {
+      "$ref": "#/$defs/id"
+    },
+    "units": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["linear", "angular"],
+      "properties": {
+        "linear": {
+          "enum": ["mm", "cm", "m", "in"]
+        },
+        "angular": {
+          "enum": ["deg", "rad"]
+        }
+      }
+    },
+    "frames": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 256,
+      "items": {
+        "$ref": "#/$defs/frame"
+      }
+    },
+    "transforms": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1024,
+      "items": {
+        "$ref": "#/$defs/transform"
+      }
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "samples": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measurement", "display"],
+      "properties": {
+        "measurement": {
+          "$ref": "#/$defs/measurementSample"
+        },
+        "display": {
+          "$ref": "#/$defs/displaySample"
+        }
+      }
+    },
+    "authority": {
+      "$ref": "#/$defs/authority"
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "$ref": "#/$defs/component"
+      }
+    },
+    "parameters": {
+      "type": "array",
+      "maxItems": 4096,
+      "items": {
+        "$ref": "#/$defs/parameter"
+      }
+    },
+    "masks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1024,
+      "items": {
+        "$ref": "#/$defs/mask"
+      }
+    },
+    "exclusions": {
+      "type": "array",
+      "maxItems": 4096,
+      "items": {
+        "$ref": "#/$defs/exclusion"
+      }
+    },
+    "uncertainty": {
+      "$ref": "#/$defs/uncertainty"
+    },
+    "validation": {
+      "$ref": "#/$defs/validation"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "authority": {
+            "properties": {
+              "kind": {
+                "enum": ["step_brep", "dwg_3dsolid"]
+              }
+            },
+            "required": ["kind"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "authority": {
+            "required": ["independent_reopen", "brep_validation"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "authority": {
+            "properties": {
+              "kind": {
+                "const": "blend_scene"
+              }
+            },
+            "required": ["kind"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "authority": {
+            "required": ["independent_reopen", "blend_validation"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "authority": {
+            "properties": {
+              "kind": {
+                "const": "occt_operation_chain"
+              }
+            },
+            "required": ["kind"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "authority": {
+            "required": ["independent_reopen", "operation_chain_validation"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "authority": {
+            "properties": {
+              "kind": {
+                "const": "procedural_mesh"
+              }
+            },
+            "required": ["kind"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "authority": {
+            "required": ["independent_reopen", "mesh_validation"]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "not": {"pattern": "[\\r\\n]"},
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "not": {"pattern": "[\\r\\n]"}
+    },
+    "nonNegative": {
+      "type": "number",
+      "minimum": 0
+    },
+    "vector3": {
+      "type": "array",
+      "prefixItems": [
+        {"type": "number"},
+        {"type": "number"},
+        {"type": "number"}
+      ],
+      "items": false,
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "bounds": {
+      "type": "object",
+      "description": "Axis-aligned bounds in the named frame and units.linear.",
+      "additionalProperties": false,
+      "required": ["frame", "min", "max"],
+      "properties": {
+        "frame": {
+          "$ref": "#/$defs/id"
+        },
+        "min": {
+          "$ref": "#/$defs/vector3"
+        },
+        "max": {
+          "$ref": "#/$defs/vector3"
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "description": "Content identity only; do not store local paths, hostnames, signed URLs, or credentials.",
+      "additionalProperties": false,
+      "required": ["sha256", "byte_count", "format"],
+      "properties": {
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "byte_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "format": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._+-]{0,31}$",
+          "not": {"pattern": "[\\r\\n]"}
+        },
+        "media_type": {
+          "type": "string",
+          "maxLength": 255,
+          "pattern": "^[a-z0-9.+-]+/[a-z0-9.+-]+$",
+          "not": {"pattern": "[\\r\\n]"}
+        }
+      }
+    },
+    "frame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "handedness", "x_axis", "y_axis", "z_axis"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "handedness": {
+          "enum": ["right", "left"]
+        },
+        "x_axis": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "y_axis": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "z_axis": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "origin": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      }
+    },
+    "transform": {
+      "type": "object",
+      "description": "Matrix is row-major; a homogeneous column vector in from_frame maps as p_to = M * p_from. Translation is in units.linear.",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "from_frame",
+        "to_frame",
+        "layout",
+        "vector_convention",
+        "translation_units",
+        "transform_type",
+        "matrix",
+        "inverse_matrix",
+        "reflection_allowed",
+        "held_out_count",
+        "round_trip_max",
+        "round_trip_tolerance",
+        "conditioning"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "from_frame": {
+          "$ref": "#/$defs/id"
+        },
+        "to_frame": {
+          "$ref": "#/$defs/id"
+        },
+        "layout": {
+          "const": "row-major"
+        },
+        "vector_convention": {
+          "const": "column-vector"
+        },
+        "translation_units": {
+          "const": "contract-linear-units"
+        },
+        "transform_type": {
+          "enum": ["rigid", "similarity", "affine"]
+        },
+        "matrix": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 16,
+          "maxItems": 16
+        },
+        "inverse_matrix": {
+          "description": "Row-major inverse mapping homogeneous column vectors from to_frame back to from_frame.",
+          "type": "array",
+          "items": {"type": "number"},
+          "minItems": 16,
+          "maxItems": 16
+        },
+        "reflection_allowed": {"type": "boolean"},
+        "held_out_count": {"type": "integer", "minimum": 1, "maximum": 9007199254740991},
+        "round_trip_max": {"$ref": "#/$defs/nonNegative"},
+        "round_trip_tolerance": {"type": "number", "exclusiveMinimum": 0},
+        "conditioning": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["norm", "condition_number", "reciprocal_condition", "evidence"],
+          "properties": {
+            "norm": {"const": "infinity"},
+            "condition_number": {"type": "number", "minimum": 1},
+            "reciprocal_condition": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+            "evidence": {"type": "string", "minLength": 1, "maxLength": 240}
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact",
+        "canonical_points_sha256",
+        "point_count",
+        "point_record",
+        "frame",
+        "bounds",
+        "units_status"
+      ],
+      "properties": {
+        "artifact": {
+          "$ref": "#/$defs/artifact"
+        },
+        "canonical_points_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "point_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "point_record": {
+          "enum": ["xyz", "xyz-normals", "xyz-rgb", "xyz-normals-rgb"]
+        },
+        "frame": {
+          "$ref": "#/$defs/id"
+        },
+        "bounds": {
+          "$ref": "#/$defs/bounds"
+        },
+        "units_status": {
+          "enum": ["verified", "provisional", "unknown"]
+        },
+        "units_evidence": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        }
+      }
+    },
+    "sampleBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "artifact",
+        "canonical_points_sha256",
+        "source_sha256",
+        "source_point_count",
+        "point_count",
+        "frame",
+        "bounds",
+        "method",
+        "algorithm_version",
+        "seed",
+        "parameters"
+      ],
+      "properties": {
+        "role": {
+          "enum": ["measurement", "display"]
+        },
+        "artifact": {
+          "$ref": "#/$defs/artifact"
+        },
+        "canonical_points_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "source_point_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "point_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "frame": {
+          "$ref": "#/$defs/id"
+        },
+        "bounds": {
+          "$ref": "#/$defs/bounds"
+        },
+        "method": {
+          "enum": ["full", "hash-rank", "masked-hash-rank", "voxel-first"]
+        },
+        "algorithm_version": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]{0,31}$",
+          "not": {"pattern": "[\\r\\n]"}
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "target_count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "voxel_size": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "eligible_count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "mask_sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        }
+      }
+    },
+    "measurementSample": {
+      "allOf": [
+        {"$ref": "#/$defs/sampleBase"},
+        {
+          "properties": {
+            "role": {"const": "measurement"}
+          }
+        }
+      ]
+    },
+    "displaySample": {
+      "allOf": [
+        {"$ref": "#/$defs/sampleBase"},
+        {
+          "properties": {
+            "role": {"const": "display"}
+          }
+        }
+      ]
+    },
+    "checkResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passed", "tool", "tool_version", "kernel", "validation_tier"],
+      "properties": {
+        "passed": {"type": "boolean"},
+        "tool": {"type": "string", "minLength": 1, "maxLength": 120},
+        "tool_version": {"type": "string", "minLength": 1, "maxLength": 80},
+        "kernel": {"type": "string", "minLength": 1, "maxLength": 120},
+        "validation_tier": {
+          "enum": ["same-kernel-fresh-process", "alternate-importer", "cross-kernel"]
+        },
+        "notes": {"type": "string", "minLength": 1, "maxLength": 240}
+      }
+    },
+    "authorityValidationSample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact", "point_count", "frame", "bounds", "derivation"],
+      "properties": {
+        "artifact": {"$ref": "#/$defs/artifact"},
+        "point_count": {"type": "integer", "minimum": 1, "maximum": 9007199254740991},
+        "frame": {"$ref": "#/$defs/id"},
+        "bounds": {"$ref": "#/$defs/bounds"},
+        "derivation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["method", "source_authority_sha256", "algorithm_version", "parameters_sha256"],
+          "properties": {
+            "method": {"enum": ["surface-tessellation", "analytic-surface-sampling", "mesh-vertices", "evaluated-copy"]},
+            "source_authority_sha256": {"$ref": "#/$defs/sha256"},
+            "algorithm_version": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9.-]{0,31}$",
+              "not": {"pattern": "[\\r\\n]"}
+            },
+            "parameters_sha256": {"$ref": "#/$defs/sha256"}
+          }
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "artifact",
+        "validation_sample",
+        "producer",
+        "replay_source_sha256"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "step_brep",
+            "dwg_3dsolid",
+            "blend_scene",
+            "occt_operation_chain",
+            "procedural_mesh"
+          ]
+        },
+        "artifact": {
+          "$ref": "#/$defs/artifact"
+        },
+        "validation_sample": {
+          "$ref": "#/$defs/authorityValidationSample"
+        },
+        "producer": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tool", "tool_version", "kernel"],
+          "properties": {
+            "tool": {"type": "string", "minLength": 1, "maxLength": 120},
+            "tool_version": {"type": "string", "minLength": 1, "maxLength": 80},
+            "kernel": {"type": "string", "minLength": 1, "maxLength": 120}
+          }
+        },
+        "replay_source_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "independent_reopen": {
+          "$ref": "#/$defs/checkResult"
+        },
+        "brep_validation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "valid_solid",
+            "solid_count",
+            "volume",
+            "unsupported_freeform_surface_count"
+          ],
+          "properties": {
+            "valid_solid": {"const": true},
+            "solid_count": {"type": "integer", "minimum": 1, "maximum": 9007199254740991},
+            "volume": {"type": "number", "exclusiveMinimum": 0},
+            "unsupported_freeform_surface_count": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+            "surface_classes": {
+              "type": "array",
+              "maxItems": 64,
+              "items": {"type": "string", "minLength": 1, "maxLength": 80}
+            }
+          }
+        },
+        "blend_validation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fresh_process_reopen", "native_object_count", "evaluation_canary"],
+          "properties": {
+            "fresh_process_reopen": {"const": true},
+            "native_object_count": {"type": "integer", "minimum": 1, "maximum": 9007199254740991},
+            "evaluation_canary": {"const": true}
+          }
+        },
+        "operation_chain_validation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["operation_chain_sha256", "deterministic_replay", "replay_count"],
+          "properties": {
+            "operation_chain_sha256": {"$ref": "#/$defs/sha256"},
+            "deterministic_replay": {"const": true},
+            "replay_count": {"type": "integer", "minimum": 2, "maximum": 9007199254740991}
+          }
+        },
+        "mesh_validation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "triangle_count",
+            "degenerate_triangle_count",
+            "boundary_edge_count",
+            "non_manifold_edge_count",
+            "consistent_winding"
+          ],
+          "properties": {
+            "triangle_count": {"type": "integer", "minimum": 1, "maximum": 9007199254740991},
+            "degenerate_triangle_count": {"const": 0},
+            "boundary_edge_count": {"const": 0},
+            "non_manifold_edge_count": {"const": 0},
+            "consistent_winding": {"const": true}
+          }
+        }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "frame",
+        "authority_sha256",
+        "primitive_chain",
+        "included_features",
+        "excluded_features"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "frame": {"$ref": "#/$defs/id"},
+        "authority_sha256": {"$ref": "#/$defs/sha256"},
+        "primitive_chain": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4096,
+          "items": {"type": "string", "minLength": 1, "maxLength": 120}
+        },
+        "included_features": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": {"$ref": "#/$defs/id"}
+        },
+        "excluded_features": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": {"$ref": "#/$defs/id"}
+        }
+      }
+    },
+    "parameterValue": {
+      "oneOf": [
+        {"type": "number"},
+        {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 16,
+          "items": {"type": "number"}
+        }
+      ]
+    },
+    "parameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "component_id",
+        "unit",
+        "raw_fit",
+        "regularized",
+        "fit_uncertainty",
+        "evidence_mask_ids"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "component_id": {"$ref": "#/$defs/id"},
+        "unit": {
+          "enum": ["mm", "cm", "m", "in", "deg", "rad", "ratio", "count", "none"]
+        },
+        "raw_fit": {"$ref": "#/$defs/parameterValue"},
+        "regularized": {"$ref": "#/$defs/parameterValue"},
+        "fit_uncertainty": {"$ref": "#/$defs/nonNegative"},
+        "regularization_reason": {"type": "string", "minLength": 1, "maxLength": 240},
+        "evidence_mask_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4096,
+          "items": {"$ref": "#/$defs/id"}
+        }
+      }
+    },
+    "aabbMask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "min", "max"],
+      "properties": {
+        "type": {"const": "aabb"},
+        "min": {"$ref": "#/$defs/vector3"},
+        "max": {"$ref": "#/$defs/vector3"}
+      }
+    },
+    "sphereMask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "center", "radius"],
+      "properties": {
+        "type": {"const": "sphere"},
+        "center": {"$ref": "#/$defs/vector3"},
+        "radius": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "externalMask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "artifact_sha256"],
+      "properties": {
+        "type": {"const": "external"},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "mask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "role", "frame", "definition_sha256", "definition"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "role": {
+          "enum": ["global", "critical-feature", "observed-surface", "fit"]
+        },
+        "component_id": {"$ref": "#/$defs/id"},
+        "feature_id": {"$ref": "#/$defs/id"},
+        "frame": {"$ref": "#/$defs/id"},
+        "definition_sha256": {"$ref": "#/$defs/sha256"},
+        "definition": {
+          "oneOf": [
+            {"$ref": "#/$defs/aabbMask"},
+            {"$ref": "#/$defs/sphereMask"},
+            {"$ref": "#/$defs/externalMask"}
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"role": {"const": "critical-feature"}},
+            "required": ["role"]
+          },
+          "then": {"required": ["component_id", "feature_id"]}
+        }
+      ]
+    },
+    "exclusion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "mask_id", "reason", "rationale", "approved"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "mask_id": {"$ref": "#/$defs/id"},
+        "reason": {
+          "enum": [
+            "unobserved-closure",
+            "scanner-occlusion",
+            "fixture",
+            "separate-component",
+            "documented-outlier"
+          ]
+        },
+        "rationale": {"type": "string", "minLength": 1, "maxLength": 240},
+        "approved": {"type": "boolean"}
+      }
+    },
+    "uncertaintyComponent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "standard_uncertainty", "evidence"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "kind": {
+          "enum": ["scanner", "registration", "scale", "segmentation", "model", "fit", "sampling"]
+        },
+        "standard_uncertainty": {"$ref": "#/$defs/nonNegative"},
+        "evidence": {"type": "string", "minLength": 1, "maxLength": 240}
+      }
+    },
+    "uncertainty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unit",
+        "model",
+        "confidence_level",
+        "components",
+        "combined_standard_uncertainty",
+        "coverage_factor",
+        "expanded_uncertainty"
+      ],
+      "properties": {
+        "unit": {"enum": ["mm", "cm", "m", "in"]},
+        "model": {"enum": ["rss-independent", "worst-case", "reported-only"]},
+        "confidence_level": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1024,
+          "items": {"$ref": "#/$defs/uncertaintyComponent"}
+        },
+        "combined_standard_uncertainty": {"$ref": "#/$defs/nonNegative"},
+        "coverage_factor": {"type": "number", "minimum": 1},
+        "expanded_uncertainty": {"$ref": "#/$defs/nonNegative"}
+      }
+    },
+    "percentileResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["percentile", "distance"],
+      "properties": {
+        "percentile": {"type": "number", "exclusiveMinimum": 0, "maximum": 100},
+        "distance": {"$ref": "#/$defs/nonNegative"}
+      }
+    },
+    "realizabilityBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start_index", "end_index", "first", "last", "sum", "sum_squares", "threshold_class"
+      ],
+      "properties": {
+        "start_index": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+        "end_index": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+        "first": {"type": "number", "minimum": 0, "maximum": 1},
+        "last": {"type": "number", "minimum": 0, "maximum": 1},
+        "sum": {"type": "number", "minimum": 0, "maximum": 9007199254740991},
+        "sum_squares": {"type": "number", "minimum": 0, "maximum": 9007199254740991},
+        "threshold_class": {"enum": ["within", "outside"]}
+      }
+    },
+    "realizabilityCertificate": {
+      "type": "object",
+      "description": "Finite IEEE-754 binary64 normalized-blocks-v1 proof, checked with relative comparison tolerance 1e-12 and zero absolute tolerance for numeric equalities. Blocks are zero-based inclusive contiguous partitions of sorted nonnegative values y=x/scale; sums and sums-of-squares include endpoints, and every Type-7 interpolation index must be exposed as a block endpoint. Required percentiles use Hyndman-Fan type 7 interpolation h=(N-1)p/100. Within means raw x<=threshold and outside means x>threshold. For scale zero every normalized value and moment is zero.",
+      "additionalProperties": false,
+      "required": ["version", "scale", "blocks"],
+      "properties": {
+        "version": {"const": "normalized-blocks-v1"},
+        "scale": {"$ref": "#/$defs/nonNegative"},
+        "blocks": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {"$ref": "#/$defs/realizabilityBlock"}
+        }
+      }
+    },
+    "semanticTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component_id", "feature_id", "surface_role", "surface_class"],
+      "properties": {
+        "component_id": {"$ref": "#/$defs/id"},
+        "feature_id": {"$ref": "#/$defs/id"},
+        "surface_role": {
+          "enum": ["fit-surface", "datum", "closure", "trim-boundary", "freeform-skin", "section-profile"]
+        },
+        "surface_class": {
+          "enum": ["plane", "cylinder", "cone", "sphere", "torus", "spline", "mesh", "mixed"]
+        }
+      }
+    },
+    "normalAgreement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["applicability", "source_normal_quality", "quality_evidence", "evaluated_count"],
+      "properties": {
+        "applicability": {"enum": ["required", "informational", "not-applicable"]},
+        "source_normal_quality": {"enum": ["verified", "estimated", "unreliable", "absent"]},
+        "quality_evidence": {"type": "string", "minLength": 1, "maxLength": 240},
+        "evaluated_count": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+        "mean_angle_deg": {"type": "number", "minimum": 0, "maximum": 180},
+        "p95_angle_deg": {"type": "number", "minimum": 0, "maximum": 180},
+        "maximum_angle_deg": {"type": "number", "minimum": 0, "maximum": 180},
+        "angle_threshold_deg": {"type": "number", "minimum": 0, "maximum": 180},
+        "exceeding_count": {"type": "integer", "minimum": 0, "maximum": 9007199254740991},
+        "realizability_certificate": {"$ref": "#/$defs/realizabilityCertificate"},
+        "reason": {"type": "string", "minLength": 1, "maxLength": 240}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"applicability": {"enum": ["required", "informational"]}}, "required": ["applicability"]},
+          "then": {
+            "required": [
+              "mean_angle_deg", "p95_angle_deg", "maximum_angle_deg",
+              "angle_threshold_deg", "exceeding_count", "realizability_certificate"
+            ]
+          }
+        }
+      ]
+    },
+    "sectionTrimEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["defining_section_ids", "trim_boundary_ids", "passed"],
+      "properties": {
+        "defining_section_ids": {
+          "type": "array",
+          "maxItems": 4096,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/id"}
+        },
+        "trim_boundary_ids": {
+          "type": "array",
+          "maxItems": 4096,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/id"}
+        },
+        "evidence_sha256": {"$ref": "#/$defs/sha256"},
+        "passed": {"type": "boolean"},
+        "not_applicable_reason": {"type": "string", "minLength": 1, "maxLength": 240}
+      }
+    },
+    "percentileGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["percentile", "maximum_distance"],
+      "properties": {
+        "percentile": {"type": "number", "exclusiveMinimum": 0, "maximum": 100},
+        "maximum_distance": {"$ref": "#/$defs/nonNegative"}
+      }
+    },
+    "acceptanceCriteria": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum_within_tolerance_percent", "minimum_observed_coverage_percent", "maximum_distance", "percentile_gates"],
+      "properties": {
+        "minimum_within_tolerance_percent": {"type": "number", "exclusiveMinimum": 0, "maximum": 100},
+        "minimum_observed_coverage_percent": {"type": "number", "minimum": 0, "maximum": 100},
+        "maximum_distance": {"$ref": "#/$defs/nonNegative"},
+        "maximum_normal_mean_angle_deg": {"type": "number", "minimum": 0, "exclusiveMaximum": 90},
+        "maximum_normal_p95_angle_deg": {"type": "number", "minimum": 0, "exclusiveMaximum": 90},
+        "maximum_normal_angle_deg": {"type": "number", "minimum": 0, "exclusiveMaximum": 90},
+        "percentile_gates": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "prefixItems": [
+            {"allOf": [{"$ref": "#/$defs/percentileGate"}, {"properties": {"percentile": {"const": 50}}}]},
+            {"allOf": [{"$ref": "#/$defs/percentileGate"}, {"properties": {"percentile": {"const": 95}}}]},
+            {"allOf": [{"$ref": "#/$defs/percentileGate"}, {"properties": {"percentile": {"const": 98}}}]},
+            {"allOf": [{"$ref": "#/$defs/percentileGate"}, {"properties": {"percentile": {"const": 99}}}]}
+          ],
+          "items": false
+        }
+      }
+    },
+    "distanceResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "direction",
+        "metric_kind",
+        "signedness",
+        "comparison_frame",
+        "transform_ids",
+        "semantic_target",
+        "query_artifact_sha256",
+        "target_artifact_sha256",
+        "mask_ids",
+        "exclusion_ids",
+        "observed_coverage_percent",
+        "coverage_basis",
+        "completeness",
+        "normal_agreement",
+        "section_trim_evidence",
+        "unobserved_face_treatment",
+        "eligible_count",
+        "evaluated_count",
+        "tolerance",
+        "within_tolerance_percent",
+        "mean",
+        "rms",
+        "percentiles",
+        "maximum",
+        "realizability_certificate",
+        "backend",
+        "batch_size",
+        "peak_memory_mib",
+        "acceptance_criteria",
+        "acceptance_status"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "direction": {"enum": ["cloud-to-authority", "authority-to-cloud"]},
+        "metric_kind": {
+          "enum": ["point-to-point", "point-to-surface", "analytic-surface-residual", "section-profile-distance", "trim-boundary-distance"]
+        },
+        "signedness": {"const": "unsigned"},
+        "comparison_frame": {"$ref": "#/$defs/id"},
+        "transform_ids": {
+          "type": "array",
+          "maxItems": 1024,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/id"}
+        },
+        "semantic_target": {"$ref": "#/$defs/semanticTarget"},
+        "query_artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "target_artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "mask_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/id"}
+        },
+        "exclusion_ids": {
+          "type": "array",
+          "maxItems": 4096,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/id"}
+        },
+        "observed_coverage_percent": {"type": "number", "minimum": 0, "maximum": 100},
+        "coverage_basis": {"enum": ["query-points", "surface-area", "trim-length"]},
+        "completeness": {"enum": ["complete-observed", "partial-observed", "unobserved-closure"]},
+        "normal_agreement": {"$ref": "#/$defs/normalAgreement"},
+        "section_trim_evidence": {"$ref": "#/$defs/sectionTrimEvidence"},
+        "unobserved_face_treatment": {
+          "enum": ["none-unobserved", "excluded-with-approved-mask", "separately-reported", "closure-only-not-fit-evidence"]
+        },
+        "eligible_count": {"type": "integer", "minimum": 1, "maximum": 9007199254740991},
+        "evaluated_count": {"type": "integer", "minimum": 1, "maximum": 9007199254740991},
+        "tolerance": {"type": "number", "exclusiveMinimum": 0},
+        "within_tolerance_percent": {"type": "number", "minimum": 0, "maximum": 100},
+        "mean": {"$ref": "#/$defs/nonNegative"},
+        "rms": {"$ref": "#/$defs/nonNegative"},
+        "percentiles": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "prefixItems": [
+            {"allOf": [{"$ref": "#/$defs/percentileResult"}, {"properties": {"percentile": {"const": 50}}}]},
+            {"allOf": [{"$ref": "#/$defs/percentileResult"}, {"properties": {"percentile": {"const": 95}}}]},
+            {"allOf": [{"$ref": "#/$defs/percentileResult"}, {"properties": {"percentile": {"const": 98}}}]},
+            {"allOf": [{"$ref": "#/$defs/percentileResult"}, {"properties": {"percentile": {"const": 99}}}]}
+          ],
+          "items": false
+        },
+        "maximum": {"$ref": "#/$defs/nonNegative"},
+        "realizability_certificate": {"$ref": "#/$defs/realizabilityCertificate"},
+        "backend": {"enum": ["stdlib-bounded", "scipy-ckdtree", "open3d-kdtree", "cad-kernel"]},
+        "batch_size": {"type": "integer", "minimum": 1, "maximum": 9007199254740991},
+        "peak_memory_mib": {"$ref": "#/$defs/nonNegative"},
+        "acceptance_criteria": {"$ref": "#/$defs/acceptanceCriteria"},
+        "acceptance_status": {"enum": ["pass", "fail", "inconclusive"]}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "normal_agreement": {
+                "properties": {"applicability": {"const": "required"}},
+                "required": ["applicability"]
+              }
+            },
+            "required": ["normal_agreement"]
+          },
+          "then": {
+            "properties": {
+              "acceptance_criteria": {
+                "required": ["maximum_normal_mean_angle_deg", "maximum_normal_p95_angle_deg", "maximum_normal_angle_deg"]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirements", "results"],
+      "properties": {
+        "requirements": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "directions",
+            "required_percentiles",
+            "max_peak_memory_mib",
+            "critical_component_ids"
+          ],
+          "properties": {
+            "directions": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "contains": {"const": "cloud-to-authority"},
+              "items": {"enum": ["cloud-to-authority", "authority-to-cloud"]}
+            },
+            "required_percentiles": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "prefixItems": [
+                {"const": 50}, {"const": 95}, {"const": 98}, {"const": 99}
+              ],
+              "items": false
+            },
+            "max_peak_memory_mib": {"type": "number", "exclusiveMinimum": 0},
+            "critical_component_ids": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 1024,
+              "uniqueItems": true,
+              "items": {"$ref": "#/$defs/id"}
+            }
+          }
+        },
+        "results": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 1024,
+          "contains": {
+            "type": "object",
+            "properties": {"direction": {"const": "cloud-to-authority"}},
+            "required": ["direction"]
+          },
+          "items": {"$ref": "#/$defs/distanceResult"}
+        }
+      }
+    }
+  }
+}
