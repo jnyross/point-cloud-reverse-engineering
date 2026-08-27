@@ -120,7 +120,7 @@
           "authority": {
             "properties": {
               "kind": {
-                "enum": ["step_brep", "dwg_3dsolid"]
+                "enum": ["step_brep", "dwg_3dsolid", "fusion_f3d"]
               }
             },
             "required": ["kind"]
@@ -131,6 +131,27 @@
         "properties": {
           "authority": {
             "required": ["independent_reopen", "brep_validation"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "authority": {
+            "properties": {
+              "kind": {
+                "const": "fusion_f3d"
+              }
+            },
+            "required": ["kind"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "authority": {
+            "required": ["fusion_validation"]
           }
         }
       }
@@ -591,6 +612,7 @@
           "enum": [
             "step_brep",
             "dwg_3dsolid",
+            "fusion_f3d",
             "blend_scene",
             "occt_operation_chain",
             "procedural_mesh"
@@ -637,6 +659,26 @@
               "maxItems": 64,
               "items": {"type": "string", "minLength": 1, "maxLength": 80}
             }
+          }
+        },
+        "fusion_validation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fresh_source_rebuild",
+            "edit_restore_probe",
+            "source_outputs_fresh",
+            "feature_count",
+            "body_count",
+            "build_warning_count"
+          ],
+          "properties": {
+            "fresh_source_rebuild": {"const": true},
+            "edit_restore_probe": {"const": true},
+            "source_outputs_fresh": {"const": true},
+            "feature_count": {"type": "integer", "minimum": 1, "maximum": 9007199254740991},
+            "body_count": {"type": "integer", "minimum": 1, "maximum": 9007199254740991},
+            "build_warning_count": {"const": 0}
           }
         },
         "blend_validation": {

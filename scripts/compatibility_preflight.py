@@ -515,6 +515,7 @@ def make_report(args: argparse.Namespace) -> dict[str, Any]:
         "cadgen": probe_cadgen(execute=execute),
         "browser_occt": {"status": "unknown", "version": None},
         "bricscad": {"status": "unknown", "version": None},
+        "autodesk_fusion": {"status": "unknown", "version": None},
     }
     components = assess_components(detections, compatibility)
     routes: dict[str, Any] = {}

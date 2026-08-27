@@ -1,6 +1,6 @@
 # Point Cloud Reverse Engineering
 
-A Codex plugin for turning fused 3D-scan point clouds into verified CAD geometry. It supports the CrealityScan/CloudCompare/BricsCAD desktop workflow, an open-source Linux route using CloudCompare/Open3D plus cadgen/build123d/OpenCascade, a Blender/CAD Sketcher AI workbench, replayable browser/OCCT applications, and honest mesh-first routes for organic print-fit work. It covers physical-datum alignment, thin-crop section lofting, direct spline surface construction, fitted recesses, regularised design-intent geometry, reversible diagnosis, and evidence-gated STEP/DWG/BLEND/STL artifacts.
+A Codex plugin for turning fused 3D-scan point clouds into verified CAD geometry. It supports a native Autodesk Fusion authority, the CrealityScan/CloudCompare/BricsCAD desktop workflow, an open-source Linux route using CloudCompare/Open3D plus cadgen/build123d/OpenCascade, a Blender/CAD Sketcher AI workbench, replayable browser/OCCT applications, and honest mesh-first routes for organic print-fit work. It covers physical-datum alignment, thin-crop section lofting, direct spline surface construction, fitted recesses, regularised design-intent geometry, reversible diagnosis, and evidence-gated F3D/STEP/DWG/BLEND/STL artifacts.
 
 The plugin also bundles the complete `earthtojake/text-to-cad` skill suite and its runtime scripts. It does not install desktop applications, Python packages, printer software, scanner data, CAD drawings, or downloaded videos.
 
@@ -19,11 +19,11 @@ The 12 companion skills are vendored from [earthtojake/text-to-cad](https://gith
 The plugin separates four roles that are often forced into one tool:
 
 - **Evidence engine:** CloudCompare or Open3D preserves, aligns, fits, and measures the point cloud.
-- **Interactive workbench:** Blender, a tiled browser viewer, BricsCAD, or FreeCAD provides crops, sections, overlays, and review.
-- **Modelling authority:** OpenCascade/build123d, BricsCAD, or another B-rep kernel owns editable manufacturing geometry when STEP/DWG is required.
+- **Interactive workbench:** Autodesk Fusion, Blender, a tiled browser viewer, BricsCAD, or FreeCAD provides crops, sections, overlays, and review.
+- **Modelling authority:** native Fusion F3D, OpenCascade/build123d, BricsCAD, or another B-rep kernel owns editable manufacturing geometry.
 - **Delivery validator:** an independent reader reopens the declared output and verifies analytic surfaces, bounds, topology, and any derived STL.
 
-The recommended hybrid route uses Open3D/CloudCompare for evidence, a versioned feature-contract JSON for handoff, OpenCascade for production STEP, and Blender or a browser for AI-operated review. A display mesh or evaluated Blender object never silently replaces the production B-rep.
+The recommended hybrid route uses Open3D/CloudCompare for evidence, a versioned feature-contract JSON for handoff, the selected B-rep authority for production geometry, and Fusion, Blender, or a browser for agent-operated review. A display mesh or evaluated workbench object never silently replaces the production authority.
 
 ### Executable evidence contract
 
@@ -57,6 +57,21 @@ When Blender is requested, the skill can combine a pinned Blender release, CAD S
 
 Blender is excellent for agent-operated exploration and visual review, but a `.blend` or evaluated mesh is not an editable STEP deliverable. When manufacturing CAD is required, the accepted alignment, raw fits, regularised parameters, feature topology, masks, and tolerances are handed to OpenCascade/`$cad` and revalidated against the same cloud evidence.
 
+### Autodesk Fusion native authority
+
+Fusion is a first-class option when the user needs a native `.f3d`, editable
+parametric manufactured geometry, a multi-body product model, and strong visual
+review. The full-density cloud remains in the numerical evidence pipeline;
+Fusion consumes the calibrated transform, raw fits, regularised parameters,
+feature contract, and optional display sample.
+
+Completion requires more than a plausible viewport: the source bundle must be
+rebuilt fresh with zero warnings, the `.f3d` must reopen in a fresh process, a
+bounded parameter edit/restore probe must prove native editability, and derived
+STEP plus one STL per accepted body must pass their own gates. Reference images
+may support topology and appearance review but do not become dimensional
+evidence.
+
 ## Install in Codex
 
 ```bash
@@ -72,8 +87,9 @@ Start a new Codex session after installation. Example requests:
 - `Diagnose this failed point-cloud handoff and recover the last verified state.`
 - `Create an editable STEP model of this bracket and validate its exported STL.`
 - `Reconstruct this scan as editable analytic STEP and STL on Linux using only open-source geometry tools.`
+- `Build this non-aligned point cloud from scratch as a native Autodesk Fusion model, prove editability, and validate STEP plus per-body STL exports.`
 - `Use Blender, CAD Sketcher, Open3D, and a local agent bridge as an AI workbench, then regenerate the accepted result as verified OpenCascade STEP.`
-- `Compare the Blender, browser/OCCT, BricsCAD, and organic mesh-first routes for this scan before choosing the modelling authority.`
+- `Compare Autodesk Fusion, Blender, browser/OCCT, BricsCAD, and organic mesh-first routes for this scan before choosing the modelling authority.`
 - `Keep the full measurement cloud outside Blender, use a named display sample, and verify the saved scene through a read-only bridge tool.`
 - `Check this mesh for additive-manufacturing problems and prepare a dry-run Bambu handoff.`
 
@@ -119,6 +135,7 @@ python3 scripts/build_distributions.py --check
 
 - The selected route's tools must already be installed. The Linux route uses open-source CloudCompare/Open3D and an isolated Python 3.11/3.12 cadgen/build123d/OpenCascade runtime; proprietary desktop applications are optional.
 - Blender, CAD Sketcher, and Blender agent bridges are optional external tools. Their exact releases and Python ABI compatibility must be pinned and canary-tested; this plugin does not install or expose them.
+- Autodesk Fusion is an optional proprietary desktop authority. Its release, licence, scripting/API behavior, computer-control access, native build, and export behavior require live bounded canaries; this plugin does not install or configure it.
 - A local Blender bridge must remain loopback-only, begin with read-only scene inspection, and use reversible previews/checkpoints for mutations. Configuring a client mid-session may require a new session.
 - Individual companion skills may require the command-line tools or Python packages named in their own instructions.
 - Live application work requires a host with computer-control support; otherwise Codex gives a precise manual handoff.

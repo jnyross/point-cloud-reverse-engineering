@@ -276,6 +276,11 @@ class CompatibilityTests(unittest.TestCase):
             compatibility_preflight.strict_route_passes("available_unverified", allow_unverified=True)
         )
 
+    def test_fusion_route_is_declared_but_requires_live_canaries(self) -> None:
+        compatibility = json.loads((ROOT / "compatibility.json").read_text(encoding="utf-8"))
+        self.assertEqual(compatibility["components"]["autodesk_fusion"]["status"], "unknown")
+        self.assertFalse(compatibility["routes"]["fusion-360"]["tested"])
+
     def test_exact_blender_tuple_is_tested_and_outside_version_is_unknown(self) -> None:
         compatibility = json.loads((ROOT / "compatibility.json").read_text(encoding="utf-8"))
         detections = {

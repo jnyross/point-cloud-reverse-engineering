@@ -609,9 +609,10 @@ def check_root_metadata(report: Report) -> None:
             "agent_bridge_command",
             "open3d",
             "cloudcompare",
+            "autodesk_fusion",
         }
         report.check(isinstance(components, dict) and required_components <= set(components),
-                     "compatibility.json must cover Blender, Python ABI, CAD Sketcher, bridge, Open3D, and CloudCompare")
+                     "compatibility.json must cover Fusion, Blender, Python ABI, CAD Sketcher, bridge, Open3D, and CloudCompare")
         report.check(isinstance(routes, dict) and bool(routes), "compatibility.json must describe route compatibility")
     if isinstance(distribution, dict):
         report.check(distribution.get("schema_version") == 1, "distribution.json schema_version must be 1")

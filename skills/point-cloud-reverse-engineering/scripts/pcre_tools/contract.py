@@ -1104,6 +1104,8 @@ def _kernel_family(value: Any) -> str:
         return "occt"
     if "parasolid" in compact:
         return "parasolid"
+    if "shapemanager" in compact or "autodeskshapemanager" in compact:
+        return "autodesk-shapemanager"
     if "acis" in tokens or "spatialacis" in compact:
         return "acis"
     if "cgm" in tokens:
@@ -1127,7 +1129,7 @@ def _check_authority(value: Any, frame_ids: Set[str], findings: Findings) -> Map
     path = "/authority"
     allowed = (
         "kind", "artifact", "validation_sample", "producer", "replay_source_sha256",
-        "independent_reopen", "brep_validation", "blend_validation",
+        "independent_reopen", "brep_validation", "fusion_validation", "blend_validation",
         "operation_chain_validation", "mesh_validation",
     )
     authority = _require_object(
@@ -1136,7 +1138,7 @@ def _check_authority(value: Any, frame_ids: Set[str], findings: Findings) -> Map
         allowed=allowed,
     )
     kind = authority.get("kind")
-    kinds = ("step_brep", "dwg_3dsolid", "blend_scene", "occt_operation_chain", "procedural_mesh")
+    kinds = ("step_brep", "dwg_3dsolid", "fusion_f3d", "blend_scene", "occt_operation_chain", "procedural_mesh")
     if kind not in kinds:
         findings.error("authority.kind", "/authority/kind", "unsupported modelling authority")
     artifact = _check_artifact(authority.get("artifact"), "/authority/artifact", findings)
@@ -1177,6 +1179,7 @@ def _check_authority(value: Any, frame_ids: Set[str], findings: Findings) -> Map
     expected_formats = {
         "step_brep": {"step", "stp"},
         "dwg_3dsolid": {"dwg"},
+        "fusion_f3d": {"f3d"},
         "blend_scene": {"blend"},
         "occt_operation_chain": {"json", "occt-chain"},
         "procedural_mesh": {"stl", "3mf", "obj", "ply"},
@@ -1205,7 +1208,7 @@ def _check_authority(value: Any, frame_ids: Set[str], findings: Findings) -> Map
     elif tier == "same-kernel-fresh-process":
         if producer_kernel and reopen_kernel and producer_kernel != reopen_kernel:
             findings.error("authority.kernel_lineage", "/authority/independent_reopen/kernel", "same-kernel tier requires matching producer and reopen kernels")
-        if kind in ("step_brep", "dwg_3dsolid"):
+        if kind in ("step_brep", "dwg_3dsolid", "fusion_f3d"):
             findings.warning("authority.same_kernel_only", "/authority/independent_reopen/validation_tier", "same-kernel reopen is useful but does not establish alternate-importer or cross-kernel portability")
     elif tier == "alternate-importer":
         if producer_kernel and reopen_kernel and producer_kernel != reopen_kernel:
@@ -1215,7 +1218,7 @@ def _check_authority(value: Any, frame_ids: Set[str], findings: Findings) -> Map
     elif tier == "cross-kernel":
         if producer_kernel and reopen_kernel and producer_kernel == reopen_kernel:
             findings.error("authority.kernel_lineage", "/authority/independent_reopen/kernel", "cross-kernel tier requires a different kernel family")
-    if kind in ("step_brep", "dwg_3dsolid"):
+    if kind in ("step_brep", "dwg_3dsolid", "fusion_f3d"):
         brep = _require_object(
             authority.get("brep_validation"), "/authority/brep_validation", findings,
             required=("valid_solid", "solid_count", "volume", "unsupported_freeform_surface_count"),
@@ -1226,6 +1229,21 @@ def _check_authority(value: Any, frame_ids: Set[str], findings: Findings) -> Map
         _check_integer(brep.get("solid_count"), "/authority/brep_validation/solid_count", findings, 1)
         _check_number(brep.get("volume"), "/authority/brep_validation/volume", findings, 0, exclusive=True)
         _check_integer(brep.get("unsupported_freeform_surface_count"), "/authority/brep_validation/unsupported_freeform_surface_count", findings, 0)
+    if kind == "fusion_f3d":
+        fusion = _require_object(
+            authority.get("fusion_validation"), "/authority/fusion_validation", findings,
+            required=("fresh_source_rebuild", "edit_restore_probe", "source_outputs_fresh", "feature_count", "body_count", "build_warning_count"),
+            allowed=("fresh_source_rebuild", "edit_restore_probe", "source_outputs_fresh", "feature_count", "body_count", "build_warning_count"),
+        )
+        if (fusion.get("fresh_source_rebuild") is not True
+                or fusion.get("edit_restore_probe") is not True
+                or fusion.get("source_outputs_fresh") is not True):
+            findings.error("authority.fusion_gate", "/authority/fusion_validation", "native Fusion authority must pass fresh rebuild, edit-restore, and output-freshness gates")
+        _check_integer(fusion.get("feature_count"), "/authority/fusion_validation/feature_count", findings, 1)
+        _check_integer(fusion.get("body_count"), "/authority/fusion_validation/body_count", findings, 1)
+        warning_count = _check_integer(fusion.get("build_warning_count"), "/authority/fusion_validation/build_warning_count", findings, 0)
+        if warning_count not in (None, 0):
+            findings.error("authority.fusion_warnings", "/authority/fusion_validation/build_warning_count", "native Fusion build must have zero recorded warnings")
     elif kind == "blend_scene":
         blend = _require_object(
             authority.get("blend_validation"), "/authority/blend_validation", findings,

@@ -7,6 +7,8 @@ and declare the authority before construction. Then dispatch once:
 
 - native Blender/CAD Sketcher authority or Blender workbench: read
   [blender-ai-workbench.md](authorities/blender-ai-workbench.md) and stop here;
+- native Autodesk Fusion `.f3d` authority or Fusion workbench: read
+  [autodesk-fusion.md](authorities/autodesk-fusion.md) and stop here;
 - replayable browser/OCCT authority: read
   [browser-occt-workbench.md](authorities/browser-occt-workbench.md) and stop here;
 - organic procedural mesh or STL-only authority: read
