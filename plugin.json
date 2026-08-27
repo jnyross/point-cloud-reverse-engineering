@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "point-cloud-reverse-engineering",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Turns fused 3D scans into calibrated, evidence-gated design-intent CAD across Autodesk Fusion, desktop, OpenCascade, browser, mesh-first, and Blender routes.",
   "license": "MIT"
 }

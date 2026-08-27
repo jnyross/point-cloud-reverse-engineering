@@ -1,6 +1,6 @@
 {
   "name": "point-cloud-reverse-engineering",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Turn fused point clouds into calibrated, evidence-gated CAD with Autodesk Fusion, desktop, OpenCascade, browser, mesh-first, or Blender routes.",
   "author": {
     "name": "jnyross",
