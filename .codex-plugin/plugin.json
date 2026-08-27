@@ -1,6 +1,6 @@
 {
   "name": "point-cloud-reverse-engineering",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Turn fused point clouds into verified design-intent CAD with desktop, OpenCascade, browser, mesh-first, or Blender AI-workbench routes.",
   "author": {
     "name": "jnyross",
