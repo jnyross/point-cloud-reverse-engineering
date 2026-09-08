@@ -1,11 +1,12 @@
 ---
 name: point-cloud-reverse-engineering
-description: Turns fused 3D-scan point clouds and supporting photographs into calibrated, uncertainty-aware scan-following or analytic design-intent geometry using Autodesk Fusion, desktop, open-source B-rep, browser/OCCT, Blender, or organic mesh routes, with reversible recovery and authority-specific F3D, STEP, DWG, BLEND, replayable OCCT, or STL gates.
+description: Extracts, cleans and aligns 3D-scan point clouds, then uses them and supporting photographs to reconstruct calibrated, uncertainty-aware scan-following or analytic design-intent geometry using Autodesk Fusion, desktop, open-source B-rep, browser/OCCT, Blender, or organic mesh routes, with reversible recovery and authority-specific F3D, STEP, DWG, BLEND, replayable OCCT, or STL gates.
 ---
 
 # Point Cloud Reverse Engineering
 
 ## Trigger
+- Get the per-pass scans out of CrealityScan, remove the table and support, and combine them in CloudCompare.
 - Turn this fused CrealityScan point cloud into an aligned BricsCAD model and verify the exported STL.
 - Align this ASC point cloud in CloudCompare with the sole down and export a BricsCAD-compatible LAS.
 - Trace splines directly on this point cloud, loft the surface patches, stitch them, and thicken the result.
@@ -30,13 +31,14 @@ description: Turns fused 3D-scan point clouds and supporting photographs into ca
 - Start, monitor, or operate a physical 3D print.
 
 ## Inputs
-A fused point cloud in ASC, PLY, E57, LAS, or LAZ form, raw or already aligned; the user must also state the object or design intent and any fit, clearance, symmetry, regularity, and required-deliverable requirements. Close-up photographs or product references may resolve feature identity, topology, and continuity, but are not dimensional evidence unless independently calibrated. A mesh may be secondary evidence but is not the primary source when a point cloud is available. Establish whether the modelling authority must be native Fusion F3D, editable STEP/DWG, a replayable OCCT feature chain, a native Blender/CAD Sketcher scene, or a print-only mesh before construction.
+One or more per-pass or fused point clouds in ASC, PLY, E57, LAS, or LAZ form, unaligned or already aligned, or a saved scanner project containing them; the user must also state the object or design intent and any fit, clearance, symmetry, regularity, and required-deliverable requirements. Close-up photographs or product references may resolve feature identity, topology, and continuity, but are not dimensional evidence unless independently calibrated. A mesh may be secondary evidence but is not the primary source when a point cloud is available. Establish whether the modelling authority must be native Fusion F3D, editable STEP/DWG, a replayable OCCT feature chain, a native Blender/CAD Sketcher scene, or a print-only mesh before construction.
 
 ## Mutation policy
-scoped: only the requested model, rejected feature, or explicitly requested local runtime setup.
+scoped: only the requested preparation outputs, model, rejected feature, or explicitly requested local runtime setup.
 
 ## Verification
 - Preserve and fingerprint the original source; keep measurement, fit, validation, display, contract, and authority artifacts separately identified.
+- Default to CrealityScan capture/export and CloudCompare preparation; use native fusion for a demonstrated benefit. Read [cloud preparation](references/cloudcompare-preparation.md) for extraction, backups, multi-pass registration, fair comparisons and macOS recovery.
 - Calibrate units independently and verify transform, handedness, point count, calibrated lengths, and bounds after every handoff.
 - Select the simplest evidence-backed topology before fitting parameters; preserve raw fits beside regularised design values.
 - Verify semantic surfaces, reliable normals where applicable, coverage, defining sections, and every critical feature locally as well as globally. A whole-model score cannot waive malformed topology.
@@ -62,13 +64,15 @@ scoped: only the requested model, rejected feature, or explicitly requested loca
 Classify the request's overall intent before matching authority vocabulary. An
 explicit read-only constraint or advisory/explanatory question is non-mutating;
 otherwise an explicit effectful route below wins over a mere tool or authority
-noun. Authority vocabulary alone never grants mutation.
+noun. Authority vocabulary alone never grants mutation. For preparation-only
+clean/crop/align/combine/export requests, the Change or Stack execution dispatcher
+first selects cloud preparation; CAD authority gates begin only at construction.
 
 - Select **Read only inquiry** for analyze, architect, assess, audit, blend, blender, bridge, browser, cad-sketcher, choose, compare, decide, diagnose, explain, geometry-nodes, hybrid, inspect, investigate, linux, mesh-first, occt, opencascade, open-source, organic, review, select, or understand. Read [read-only.md](references/read-only.md), which dispatches without mutation to diagnosis or stack selection.
 - Select **Linux open source runtime** for containerize, or provision. Read [linux-open-source.md](references/linux-open-source.md).
-- Select **Stack execution** for combine, integrate, or orchestrate. Read [stack-selection.md](references/stack-selection.md), validate the handoff contract, then use only the selected authority route.
-- Select **Change** for add, align, build, change, compress, create, delete, edit, export, fix, implement, loft, optimise, optimize, rebuild, reconstruct, refactor, remove, repair, simplify, stitch, thicken, trace, turn, update, or write. Read the dispatcher in [operate.md](references/operate.md), then only the fixed authority playbook: [Autodesk Fusion](references/authorities/autodesk-fusion.md), [Blender](references/authorities/blender-ai-workbench.md), [browser/OCCT](references/authorities/browser-occt-workbench.md), [organic mesh-first](references/authorities/organic-mesh-first.md), Linux/open-source, or the remaining desktop sections. Every route applies the [shared evidence contract](references/shared/evidence-and-validation.md).
+- Select **Stack execution** for combine, integrate, or orchestrate. Read [stack-selection.md](references/stack-selection.md), follow its preparation-only exit when applicable; otherwise validate the handoff contract and use only the selected authority route.
+- Select **Change** for add, align, build, change, clean, compress, create, crop, delete, edit, export, extract, fix, implement, loft, optimise, optimize, rebuild, reconstruct, refactor, register, remove, repair, segment, simplify, stitch, thicken, trace, turn, update, or write. Read the dispatcher in [operate.md](references/operate.md), then only the fixed authority playbook: [Autodesk Fusion](references/authorities/autodesk-fusion.md), [Blender](references/authorities/blender-ai-workbench.md), [browser/OCCT](references/authorities/browser-occt-workbench.md), [organic mesh-first](references/authorities/organic-mesh-first.md), Linux/open-source, or the remaining desktop sections. Every construction route applies the [shared evidence contract](references/shared/evidence-and-validation.md).
 
 ## Operating rule
 
-Read the selected read-only or stack route completely. For **Change**, read the dispatch header of `operate.md` first: when authority is fixed, load the shared contract and only that authority playbook; read the remaining desktop sections only for the CloudCompare/BricsCAD route. For live GUI work, use the host's computer-control capability when available and verify each material command from application state. Prefer an equivalent bounded numerical or CAD-kernel route when it proves the required geometry without the GUI; if neither is available, stop at a precise manual handoff rather than claiming completion.
+Read the selected read-only or stack route completely. For **Change**, read the dispatch header of `operate.md` first: finish preparation-only work through its cloud route; for construction, when authority is fixed, load the shared contract and only that authority playbook; read the remaining desktop sections only for the CloudCompare/BricsCAD route. For live GUI work, use the host's computer-control capability when available and verify each material command from application state. Prefer an equivalent bounded numerical or CAD-kernel route when it proves the required geometry without the GUI; if neither is available, stop at a precise manual handoff rather than claiming completion.

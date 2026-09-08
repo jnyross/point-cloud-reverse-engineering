@@ -256,5 +256,41 @@
     "request": "A Fusion workflow for this point cloud.",
     "route": "fallback",
     "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-44-clean",
+    "request": "Clean and crop these CrealityScan passes in CloudCompare.",
+    "route": "operate",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-45-register",
+    "request": "Register these opposing scan faces using the shared rim.",
+    "route": "operate",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-46-combine-clouds",
+    "request": "Combine these per-pass PLY clouds without building CAD.",
+    "route": "stack-selection",
+    "mutation": "scoped"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-47-advisory-clean",
+    "request": "How should we clean and register these scans?",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-48-read-only-segment",
+    "request": "Inspect how to segment the support without editing.",
+    "route": "read-only",
+    "mutation": "none"
+  },
+  {
+    "id": "point-cloud-reverse-engineering-49-extract",
+    "request": "Extract the individual scans from this saved CrealityScan project.",
+    "route": "operate",
+    "mutation": "scoped"
   }
 ]

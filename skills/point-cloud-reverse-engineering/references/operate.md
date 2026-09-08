@@ -2,6 +2,12 @@
 
 ## Dispatch before loading host details
 
+For preparation-only work (extract, clean, crop, segment, align, combine or
+export clouds), read [cloudcompare-preparation.md](cloudcompare-preparation.md)
+and finish its cloud verification gates. No CAD authority or feature contract
+is needed until construction is requested. For a request that also builds CAD,
+prepare the evidence first, then continue below.
+
 Apply the [shared evidence and validation contract](shared/evidence-and-validation.md)
 and declare the authority before construction. Then dispatch once:
 
@@ -35,20 +41,11 @@ replayable OCCT chain, editable STEP/DWG, and STL-only mesh as interchangeable.
 
 ## CrealityScan to CloudCompare
 
-1. Complete point-cloud processing, fusion, and restrained cleanup in CrealityScan. Preserve edges and mating surfaces.
-2. Export the fused **point cloud** as ASC. Do not choose a mesh export for the primary handoff.
-3. Open the ASC in CloudCompare. For a six-column scanner export, map the fields to `X`, `Y`, `Z`, `Nx`, `Ny`, `Nz`, use whitespace separation, skip zero header lines, and keep scale at 1 unless independent evidence proves another scale.
-4. Confirm CloudCompare identifies the entity as a cloud, not a mesh. Record its point count and bounding dimensions.
-5. Clone the cloud and align the clone from physical datums:
-   - level a known flat datum to XY;
-   - assign a meaningful long or symmetry axis to X;
-   - assign width to Y and height to Z;
-   - move a documented datum or centre near the origin.
-6. Verify top, front, side, and isometric views. A visually tidy bounding-box alignment is not a substitute for manufactured datums.
-7. Recheck point count and bounds. Rotation may change axis-aligned bounds; scale and point count must remain explainable.
-8. Save a separately named E57 archive when useful. Export a separately named LAS for BricsCAD, because LAS is the reliable point-cloud interchange for this workflow.
-
-For a hand plane, the sole is the XY datum, heel-to-toe is X, width is Y, and the tote and knob rise in positive Z. The perpendicular side planes disambiguate the width axis.
+Use [cloudcompare-preparation.md](cloudcompare-preparation.md) to extract
+per-pass project clouds or exported PLY/ASC, preserve the source, remove supports,
+register and verify. Native fusion is optional; inspect actual fields rather
+than assuming six-column ASC. Follow its datum and LAS handoff checks before
+continuing into BricsCAD.
 
 ## CloudCompare to BricsCAD
 

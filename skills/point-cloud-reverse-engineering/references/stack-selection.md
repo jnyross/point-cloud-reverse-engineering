@@ -1,5 +1,13 @@
 # Stack selection and hybrid handoff
 
+For a request to combine only scan passes, use
+[cloudcompare-preparation.md](cloudcompare-preparation.md) and its cloud gates;
+do not demand a CAD authority or feature contract. For advisory comparisons of
+scanner fusion and CloudCompare preparation, read that reference without
+mutation. The default is capture/export in CrealityScan, preparation in
+CloudCompare, then compact parametric CAD; native fusion needs a demonstrated
+benefit beyond increased density or smoothness.
+
 Choose the modelling authority before construction. The best evidence engine,
 agent interface, visual reviewer, modelling authority, and delivery validator
 need not be the same application.
